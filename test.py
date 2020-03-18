@@ -11,7 +11,7 @@ app = QApplication([])
 
 gui = QWidget()
 gui.setWindowTitle("ManagerCraft (Test Environment)")
-gui.setGeometry(100, 100, 720, 540)
+gui.setGeometry(100, 100, 1024, 540)
 
 '''layout = QFormLayout()
 grab = QLineEdit()
