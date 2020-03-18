@@ -1,0 +1,17 @@
+<RCC>
+  <qresource prefix="newPrefix">
+    <file>BG2.png</file>
+    <file>ManageCraft.png</file>
+  </qresource>
+  <qresource prefix="Buttons">
+    <file>Username.png</file>
+    <file>Password.png</file>
+    <file>RemoteButton.png</file>
+    <file>ConnectButton.png</file>
+    <file>LocalButton.png</file>
+    <file>Host.png</file>
+  </qresource>
+  <qresource prefix="BG">
+    <file>BG1.png</file>
+  </qresource>
+</RCC>
