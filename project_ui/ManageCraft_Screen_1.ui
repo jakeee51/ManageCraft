@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1024</width>
-    <height>720</height>
+    <height>540</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -19,6 +19,9 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="autoFillBackground">
+   <bool>false</bool>
+  </property>
   <property name="styleSheet">
    <string notr="true"/>
   </property>
@@ -26,11 +29,14 @@
    <enum>QTabWidget::Rounded</enum>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="autoFillBackground">
+    <bool>false</bool>
+   </property>
    <widget class="QTextEdit" name="textEdit">
     <property name="geometry">
      <rect>
-      <x>430</x>
-      <y>250</y>
+      <x>440</x>
+      <y>220</y>
       <width>251</width>
       <height>41</height>
      </rect>
@@ -45,8 +51,8 @@
    <widget class="QTextEdit" name="textEdit_2">
     <property name="geometry">
      <rect>
-      <x>430</x>
-      <y>310</y>
+      <x>440</x>
+      <y>280</y>
       <width>251</width>
       <height>41</height>
      </rect>
@@ -61,8 +67,8 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>320</x>
-      <y>250</y>
+      <x>330</x>
+      <y>220</y>
       <width>111</width>
       <height>41</height>
      </rect>
@@ -80,8 +86,8 @@
    <widget class="QLabel" name="label_3">
     <property name="geometry">
      <rect>
-      <x>220</x>
-      <y>370</y>
+      <x>230</x>
+      <y>340</y>
       <width>211</width>
       <height>41</height>
      </rect>
@@ -93,8 +99,8 @@
    <widget class="QTextEdit" name="textEdit_3">
     <property name="geometry">
      <rect>
-      <x>430</x>
-      <y>370</y>
+      <x>440</x>
+      <y>340</y>
       <width>251</width>
       <height>41</height>
      </rect>
@@ -109,8 +115,8 @@
    <widget class="QLabel" name="label_4">
     <property name="geometry">
      <rect>
-      <x>220</x>
-      <y>310</y>
+      <x>230</x>
+      <y>280</y>
       <width>211</width>
       <height>41</height>
      </rect>
@@ -122,8 +128,8 @@
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>380</x>
-      <y>170</y>
+      <x>390</x>
+      <y>140</y>
       <width>141</width>
       <height>41</height>
      </rect>
@@ -147,8 +153,8 @@
    <widget class="QPushButton" name="pushButton_2">
     <property name="geometry">
      <rect>
-      <x>520</x>
-      <y>170</y>
+      <x>530</x>
+      <y>140</y>
       <width>141</width>
       <height>41</height>
      </rect>
@@ -170,8 +176,8 @@ border-image: url(:/Buttons/LocalButton.png);</string>
    <widget class="QPushButton" name="pushButton_3">
     <property name="geometry">
      <rect>
-      <x>410</x>
-      <y>440</y>
+      <x>420</x>
+      <y>410</y>
       <width>231</width>
       <height>61</height>
      </rect>
@@ -186,9 +192,9 @@ border-image: url(:/Buttons/LocalButton.png);</string>
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>260</x>
+      <x>240</x>
       <y>40</y>
-      <width>521</width>
+      <width>611</width>
       <height>81</height>
      </rect>
     </property>
@@ -198,8 +204,15 @@ border-image: url(:/Buttons/LocalButton.png);</string>
     <property name="text">
      <string/>
     </property>
+    <property name="pixmap">
+     <pixmap resource="Logo.qrc">:/Labels/ManageCraft.png</pixmap>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
    </widget>
   </widget>
+  <widget class="QStatusBar" name="statusbar"/>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
@@ -209,14 +222,13 @@ border-image: url(:/Buttons/LocalButton.png);</string>
      <height>21</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuManageCraft">
+   <widget class="QMenu" name="menuFile">
     <property name="title">
-     <string>ManageCraft</string>
+     <string>File</string>
     </property>
    </widget>
-   <addaction name="menuManageCraft"/>
+   <addaction name="menuFile"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources>
   <include location="Logo.qrc"/>

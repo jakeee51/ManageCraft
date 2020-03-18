@@ -1,6 +1,5 @@
 <RCC>
-  <qresource prefix="newPrefix">
-    <file>BG2.png</file>
+  <qresource prefix="Labels">
     <file>ManageCraft.png</file>
   </qresource>
   <qresource prefix="Buttons">
@@ -12,6 +11,6 @@
     <file>Host.png</file>
   </qresource>
   <qresource prefix="BG">
-    <file>BG1.png</file>
+    <file>Frame_1.png</file>
   </qresource>
 </RCC>
