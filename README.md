@@ -1,4 +1,4 @@
-# ManageCraft
+# ManageCraft (W.I.P.)
 A Minecraft server manager/wrapper. A desktop application that let's you manage &amp; configure your remote Minecraft server.
 
 Adding an appropriately decorative, intuitive, easy to use interface for Minecraft server administrators to manage their servers remotely.
