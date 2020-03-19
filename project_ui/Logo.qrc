@@ -1,5 +1,7 @@
 <RCC>
   <qresource prefix="Labels">
+    <file>Frame_1.png</file>
+    <file>WindowFrame.png</file>
     <file>ManageCraft.png</file>
   </qresource>
   <qresource prefix="Buttons">
