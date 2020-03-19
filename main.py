@@ -95,7 +95,7 @@ class Window(QMainWindow):
 
         title = QLabel("<h1>MANAGECRAFT</h1>")
         btn1 = QPushButton("REMOTE"); btn1.setFixedSize(170, 40)
-        btn1.setCheckable(False); btn1.setChecked(True); btn1.setEnabled(False)
+        btn1.setCheckable(True); btn1.setChecked(True)
         btn2 = QPushButton("LOCAL"); btn2.setFixedSize(170, 40);
         btn2.setCheckable(True); btn2.setChecked(False)
         btn3 = QPushButton("CONNECT!"); btn3.setFixedSize(200, 50)
