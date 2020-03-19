@@ -27,6 +27,8 @@ def login(main, back, t1, t2):
 app = QApplication([])
 
 gui = QWidget()
+gui.setStyleSheet("background-image: url(Frame_1.png);\
+                  background-repeat: no-repeat;")
 gui.setWindowTitle("ManagerCraft (Test Environment)")
 gui.setGeometry(100, 100, 1024, 540)
 
@@ -38,7 +40,7 @@ grab = QLineEdit(); pas = QLineEdit(); pas.setEchoMode(QLineEdit.Password)
 grab.setFixedSize(100, 20); pas.setFixedSize(100, 20)
 layout.addRow("Username:", grab); layout.addRow("Password:", pas)
 btn = QPushButton("LOGIN", parent=frame)
-btn.setFixedSize(100, 20)
+btn.setFixedSize(100, 20); btn.setDown(True)
 btn.clicked.connect(partial(login, gui, frame, grab, pas))
 
 layout.addWidget(btn)

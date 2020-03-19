@@ -3,7 +3,7 @@
 Author: David J. Morfe
 Application Name: ManageCraft
 Functionality Purpose: A Minecraft Server Manager Application
-Version: 0.0.1
+Version: 0.0.2
 '''
 #3/19/20
 
@@ -27,10 +27,11 @@ client.close()'''
 import paramiko
 import re, os, sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QFrame, QDialog
-from PyQt5.QtWidgets import QStatusBar, QToolBar
+from PyQt5.QtWidgets import QStatusBar, QToolBar, QButtonGroup
 from PyQt5.QtWidgets import QLabel, QPushButton, QRadioButton, QLineEdit
 from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QGridLayout, QFormLayout
-from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QIcon, QPixmap
+from PyQt5.QtCore import Qt, QSize
 from functools import partial
 
 class Window(QMainWindow):
@@ -48,11 +49,11 @@ class Window(QMainWindow):
         self.pas.setEchoMode(QLineEdit.Password)
         self.host.setFixedSize(250, 20); self.user.setFixedSize(250, 20); self.pas.setFixedSize(250, 20)
 
-        self.frame0 = QFrame(self.centralWidget()); self.frame0.setFixedSize(1024, 540)
-        self.frame1 = QFrame(self.centralWidget()); self.frame1.hide(); self.frame1.setFixedSize(1024, 540)
+        self.frameR = QFrame(self.centralWidget()); self.frameR.setFixedSize(1024, 540)
+        self.frameL = QFrame(self.centralWidget()); self.frameL.hide(); self.frameL.setFixedSize(1024, 540)
         self.frame2 = QFrame(self.centralWidget()); self.frame2.hide(); self.frame2.setFixedSize(1024, 540)
         self.frame3 = QFrame(self.centralWidget()); self.frame3.hide(); self.frame3.setFixedSize(1024, 540)
-        self._createLoginScreen()
+        self._createFirstScreen()
         self.mainMenu = True; self.tools = None
 
         self.client = None
@@ -63,10 +64,10 @@ class Window(QMainWindow):
         frame.show()
     def __DC(self):
         self.removeToolBar(self.tools)
-        self.frame1.close()
+        self.frameL.close()
         self.frame2.close()
         self.frame3.close()
-        self.frame0.show()
+        self.frameR.show()
     def __startServer(self, client):
         stdin, stdout, stderr = client.exec_command('systemctl start minecraft')
     def __stopServer(self, client):
@@ -86,21 +87,60 @@ class Window(QMainWindow):
         status = QStatusBar()
         status.showMessage("Server Status: Online / Offline")
         self.setStatusBar(status)
-    def _createLoginScreen(self):
+    def _createSecondScreen(self):
         vLayout = QVBoxLayout(self.centralWidget()); vLayout.setAlignment(Qt.AlignTop)
         hLayout = QHBoxLayout(self.centralWidget()); hLayout.setSpacing(0)
         hLayout.setAlignment(Qt.AlignHCenter)
         formLayout = QFormLayout(self.centralWidget()); formLayout.setFormAlignment(Qt.AlignHCenter)
         formLayout.setLabelAlignment(Qt.AlignRight)
 
-        title = QLabel("<h1>MANAGECRAFT</h1>")
-        btn1 = QPushButton("REMOTE"); btn1.setFixedSize(170, 40)
+        btnGroup = QButtonGroup(); btnGroup.setExclusive(True)
+        title = QLabel()
+        tPng = QPixmap("ManageCraft.png"); title.setPixmap(tPng)
+        btn1 = QPushButton(); btn1.setFixedSize(130, 40)
+        btn1.setCheckable(True); btn1.setChecked(False)
+        rcPng = QIcon("RemoteBtn.png"); btn1.setIcon(rcPng)
+        btn1.setIconSize(QSize(170, 40))
+        btn2 = QPushButton(); btn2.setFixedSize(130, 40);
+        btn2.setCheckable(True); btn2.setChecked(True)
+        lcPng = QIcon("LocalBtnChecked.png"); btn2.setIcon(lcPng)
+        btn2.setIconSize(QSize(170, 40))
+        btn3 = QPushButton("BROWSE!"); btn3.setFixedSize(200, 50)
+        btn1.toggled.connect(self.remote); btnGroup.addButton(btn1)
+        btn2.toggled.connect(self.local); btnGroup.addButton(btn2)
+        btn3.clicked.connect(self.browse)
+
+        vLayout.addWidget(title, alignment=Qt.AlignCenter)
+        hLayout.addWidget(btn1, alignment=Qt.AlignHCenter); hLayout.addWidget(btn2, alignment=Qt.AlignHCenter)
+        vLayout.addLayout(hLayout)
+        vLayout.addWidget(btn3, alignment=Qt.AlignCenter)
+
+        self.frameL.setLayout(vLayout)
+        self.mainMenu = False
+        self.frameL.hide()
+    def _createFirstScreen(self):
+        vLayout = QVBoxLayout(self.centralWidget()); vLayout.setAlignment(Qt.AlignTop)
+        hLayout = QHBoxLayout(self.centralWidget()); hLayout.setSpacing(0)
+        hLayout.setAlignment(Qt.AlignHCenter)
+        formLayout = QFormLayout(self.centralWidget()); formLayout.setFormAlignment(Qt.AlignHCenter)
+        formLayout.setLabelAlignment(Qt.AlignRight)
+
+        btnGroup = QButtonGroup(); btnGroup.setExclusive(True)
+        title = QLabel()
+        tPng = QPixmap("ManageCraft.png"); title.setPixmap(tPng)
+        btn1 = QPushButton(); btn1.setFixedSize(130, 40)
         btn1.setCheckable(True); btn1.setChecked(True)
-        btn2 = QPushButton("LOCAL"); btn2.setFixedSize(170, 40);
+        rcPng = QIcon("RemoteBtnChecked.png"); btn1.setIcon(rcPng)
+        btn1.setIconSize(QSize(170, 40))
+        btn2 = QPushButton(); btn2.setFixedSize(130, 40);
         btn2.setCheckable(True); btn2.setChecked(False)
-        btn3 = QPushButton("CONNECT!"); btn3.setFixedSize(200, 50)
-        btn1.clicked.connect(self.remote)
-        btn2.clicked.connect(self.local)
+        lcPng = QIcon("LocalBtn.png"); btn2.setIcon(lcPng)
+        btn2.setIconSize(QSize(170, 40))
+        btn3 = QPushButton(); btn3.setFixedSize(155, 45)
+        cPng = QIcon("ConnectBtn.png"); btn3.setIcon(cPng)
+        btn3.setIconSize(QSize(200, 40))
+        btn1.toggled.connect(self.remote); btnGroup.addButton(btn1)
+        btn2.toggled.connect(self.local); btnGroup.addButton(btn2)
         btn3.clicked.connect(partial(self.connect,
                                      self.host,
                                      self.user, self.pas))
@@ -114,21 +154,31 @@ class Window(QMainWindow):
         vLayout.addLayout(formLayout)
         vLayout.addWidget(btn3, alignment=Qt.AlignCenter)
 
-        self.frame0.setLayout(vLayout)
+        self.frameR.setLayout(vLayout)
         self.mainMenu = False
+        self._createSecondScreen()
     def remote(self):
-        pass
+        if self.frameR.isVisible():
+            pass
+        else:
+            self.frameL.hide()
+            self.frameR.show()
     def connect(self, host, user, pas): # Pack to config window
-        L1 = QLabel("<H2>MANAGECRAFT</h2>", parent=self.frame1)
+        title = QLabel(self.frame2)
+        tPng = QPixmap("ManageCraft.png"); tPng = tPng.scaled(450, 150, Qt.KeepAspectRatio); title.setPixmap(tPng);
         self._createToolBar()
-        self.frame1.show()
-        self.frame0.hide()
+        self.frame2.show()
+        self.frameR.hide()
         '''client = paramiko.SSHClient()
         client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         client.connect(host, port=22, username=user, password=pas)
         self.client = client'''
     def local(self):
-        pass
+        if self.frameL.isVisible():
+            pass
+        else:
+            self.frameR.hide()
+            self.frameL.show()
     def browse(self): # Pack to browse window
         pass
 
