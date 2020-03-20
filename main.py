@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 '''
-Author: David J. Morfe
+Author: David J. Morfe,
+        Antara V. Morfe,
+        & Ali E. Khan
 Application Name: ManageCraft
 Functionality Purpose: A Minecraft Server Manager Application
-Version: 0.0.2
+Version: 0.0.3
 '''
 #3/19/20
 
@@ -44,11 +46,12 @@ class Window(QMainWindow):
         self.setFixedSize(1024, 540)
         self._createMenu()
         self._createStatusBar()
+
         self.host = QLineEdit(); self.path = QLineEdit()
         self.user = QLineEdit(); self.pas = QLineEdit()
         self.pas.setEchoMode(QLineEdit.Password)
         self.host.setFixedSize(250, 20); self.user.setFixedSize(250, 20); self.pas.setFixedSize(250, 20)
-
+        
         self.frameR = QFrame(self.centralWidget()); self.frameR.setFixedSize(1024, 540)
         self.frameL = QFrame(self.centralWidget()); self.frameL.hide(); self.frameL.setFixedSize(1024, 540)
         self.frame2 = QFrame(self.centralWidget()); self.frame2.hide(); self.frame2.setFixedSize(1024, 540)
@@ -79,14 +82,18 @@ class Window(QMainWindow):
         self.menu.addAction("Disconnect", self.__DC)
         self.menu.addAction("Exit", self.close)
     def _createToolBar(self):
-        self.tools = QToolBar()
-        self.addToolBar(self.tools)
+        self.tools = QToolBar(); self.tools.setMovable(False)
+        self.addToolBar(Qt.LeftToolBarArea, self.tools)
         self.tools.addAction("CONFIGURATION", self.close)
         self.tools.addAction("STATUS", self.close)
     def _createStatusBar(self):
         status = QStatusBar()
         status.showMessage("Server Status: Online / Offline")
         self.setStatusBar(status)
+    def btnPressToggle(self, b, png):
+        Png = QIcon(f"./graphics/{png}"); b.setIcon(Png)
+        b.setIconSize(QSize(200, 40))
+
     def _createSecondScreen(self):
         vLayout = QVBoxLayout(self.centralWidget()); vLayout.setAlignment(Qt.AlignTop)
         hLayout = QHBoxLayout(self.centralWidget()); hLayout.setSpacing(0)
@@ -96,19 +103,21 @@ class Window(QMainWindow):
 
         btnGroup = QButtonGroup(); btnGroup.setExclusive(True)
         title = QLabel()
-        tPng = QPixmap("ManageCraft.png"); title.setPixmap(tPng)
+        tPng = QPixmap("./graphics/ManageCraft.png"); title.setPixmap(tPng)
         btn1 = QPushButton(); btn1.setFixedSize(130, 40)
         btn1.setCheckable(True); btn1.setChecked(False)
-        rcPng = QIcon("RemoteBtn.png"); btn1.setIcon(rcPng)
+        rcPng = QIcon("./graphics/RemoteBtn.png"); btn1.setIcon(rcPng)
         btn1.setIconSize(QSize(170, 40))
         btn2 = QPushButton(); btn2.setFixedSize(130, 40);
         btn2.setCheckable(True); btn2.setChecked(True)
-        lcPng = QIcon("LocalBtnChecked.png"); btn2.setIcon(lcPng)
+        lcPng = QIcon("./graphics/LocalBtnChecked.png"); btn2.setIcon(lcPng)
         btn2.setIconSize(QSize(170, 40))
         btn3 = QPushButton("BROWSE!"); btn3.setFixedSize(200, 50)
         btn1.toggled.connect(self.remote); btnGroup.addButton(btn1)
         btn2.toggled.connect(self.local); btnGroup.addButton(btn2)
         btn3.clicked.connect(self.browse)
+        btn1.pressed.connect(partial(self.btnPressToggle, btn1, "RemoteBtnChecked.png"))
+        btn1.released.connect(partial(self.btnPressToggle, btn1, "RemoteBtn.png"))
 
         vLayout.addWidget(title, alignment=Qt.AlignCenter)
         hLayout.addWidget(btn1, alignment=Qt.AlignHCenter); hLayout.addWidget(btn2, alignment=Qt.AlignHCenter)
@@ -127,23 +136,27 @@ class Window(QMainWindow):
 
         btnGroup = QButtonGroup(); btnGroup.setExclusive(True)
         title = QLabel()
-        tPng = QPixmap("ManageCraft.png"); title.setPixmap(tPng)
+        tPng = QPixmap("./graphics/ManageCraft.png"); title.setPixmap(tPng)
         btn1 = QPushButton(); btn1.setFixedSize(130, 40)
         btn1.setCheckable(True); btn1.setChecked(True)
-        rcPng = QIcon("RemoteBtnChecked.png"); btn1.setIcon(rcPng)
+        rcPng = QIcon("./graphics/RemoteBtnChecked.png"); btn1.setIcon(rcPng)
         btn1.setIconSize(QSize(170, 40))
         btn2 = QPushButton(); btn2.setFixedSize(130, 40);
         btn2.setCheckable(True); btn2.setChecked(False)
-        lcPng = QIcon("LocalBtn.png"); btn2.setIcon(lcPng)
+        lcPng = QIcon("./graphics/LocalBtn.png"); btn2.setIcon(lcPng)
         btn2.setIconSize(QSize(170, 40))
         btn3 = QPushButton(); btn3.setFixedSize(155, 45)
-        cPng = QIcon("ConnectBtn.png"); btn3.setIcon(cPng)
+        cPng = QIcon("./graphics/ConnectBtn.png"); btn3.setIcon(cPng)
         btn3.setIconSize(QSize(200, 40))
         btn1.toggled.connect(self.remote); btnGroup.addButton(btn1)
         btn2.toggled.connect(self.local); btnGroup.addButton(btn2)
         btn3.clicked.connect(partial(self.connect,
                                      self.host,
                                      self.user, self.pas))
+        btn2.pressed.connect(partial(self.btnPressToggle, btn2, "LocalBtnChecked.png"))
+        btn2.released.connect(partial(self.btnPressToggle, btn2, "LocalBtn.png"))
+        btn3.pressed.connect(partial(self.btnPressToggle, btn3, "ConnectBtnChecked.png"))
+        btn3.released.connect(partial(self.btnPressToggle, btn3, "ConnectBtn.png"))
 
         formLayout.addRow("Host:", self.host)
         formLayout.addRow("Username:", self.user)
@@ -165,7 +178,7 @@ class Window(QMainWindow):
             self.frameR.show()
     def connect(self, host, user, pas): # Pack to config window
         title = QLabel(self.frame2)
-        tPng = QPixmap("ManageCraft.png"); tPng = tPng.scaled(450, 150, Qt.KeepAspectRatio); title.setPixmap(tPng);
+        tPng = QPixmap("./graphics/ManageCraft.png"); tPng = tPng.scaled(450, 150, Qt.KeepAspectRatio); title.setPixmap(tPng);
         self._createToolBar()
         self.frame2.show()
         self.frameR.hide()
