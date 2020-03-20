@@ -68,6 +68,7 @@ background-repeat: no-repeat;")
         prev.hide()
         frame.show()
     def __DC(self):
+        #self.client.close()
         self.removeToolBar(self.tools)
         self.frameL.close()
         self.frameC.close()
@@ -75,10 +76,13 @@ background-repeat: no-repeat;")
         self.frameR.show()
     def __startServer(self, client):
         stdin, stdout, stderr = client.exec_command('systemctl start minecraft')
+        #stdin, stdout, stderr = client.exec_command('systemctl start ngrok')
     def __stopServer(self, client):
         stdin, stdout, stderr = client.exec_command('systemctl stop minecraft')
+        #stdin, stdout, stderr = client.exec_command('systemctl stop ngrok')
     def __restartServer(self, client):
         stdin, stdout, stderr = client.exec_command('systemctl restart minecraft')
+        #stdin, stdout, stderr = client.exec_command('systemctl restart ngrok')
     def _createMenu(self):
         self.menu = self.menuBar().addMenu("Menu")
         self.menu.addAction("Disconnect", self.__DC)
@@ -179,8 +183,8 @@ background-repeat: no-repeat;")
             self.frameL.hide()
             self.frameR.show()
     def connect(self, host, user, pas): # Pack to config window
-        title = QLabel(self.frameC)
-        tPng = QPixmap("./graphics/ManageCraft.png"); tPng = tPng.scaled(450, 150, Qt.KeepAspectRatio); title.setPixmap(tPng);
+        #title = QLabel(self.frameC); tPng = QPixmap("./graphics/ManageCraft.png"); 
+        #tPng = tPng.scaled(450, 150, Qt.KeepAspectRatio); title.setPixmap(tPng);
         self._createToolBar()
         self.frameC.show()
         self.frameR.hide()
