@@ -42,6 +42,9 @@ class Window(QMainWindow):
         super().__init__(parent)
         self.setWindowTitle("ManagerCraft")
         self.setCentralWidget(QWidget())
+        self.frame = QFrame(self.centralWidget()); self.frame.setFixedSize(1030, 540)
+        self.frame.setStyleSheet("border-image: url(./graphics/WindowFrame.png);\
+background-repeat: no-repeat;")
         self.setGeometry(100, 100, 1024, 540)
         self.setFixedSize(1024, 540)
         self._createMenu()
