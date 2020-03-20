@@ -7,10 +7,10 @@
   <qresource prefix="Buttons">
     <file>Username.png</file>
     <file>Password.png</file>
-    <file>RemoteButton.png</file>
-    <file>ConnectButton.png</file>
-    <file>LocalButton.png</file>
     <file>Host.png</file>
+    <file>ConnectBtn.png</file>
+    <file>LocalBtn.png</file>
+    <file>RemoteBtn.png</file>
   </qresource>
   <qresource prefix="BG">
     <file>Frame_1.png</file>

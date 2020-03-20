@@ -54,8 +54,8 @@ class Window(QMainWindow):
         
         self.frameR = QFrame(self.centralWidget()); self.frameR.setFixedSize(1024, 540)
         self.frameL = QFrame(self.centralWidget()); self.frameL.hide(); self.frameL.setFixedSize(1024, 540)
-        self.frame2 = QFrame(self.centralWidget()); self.frame2.hide(); self.frame2.setFixedSize(1024, 540)
-        self.frame3 = QFrame(self.centralWidget()); self.frame3.hide(); self.frame3.setFixedSize(1024, 540)
+        self.frameC = QFrame(self.centralWidget()); self.frameC.hide(); self.frameC.setFixedSize(1024, 540)
+        self.frameS = QFrame(self.centralWidget()); self.frameS.hide(); self.frameS.setFixedSize(1024, 540)
         self._createFirstScreen()
         self.mainMenu = True; self.tools = None
 
@@ -68,8 +68,8 @@ class Window(QMainWindow):
     def __DC(self):
         self.removeToolBar(self.tools)
         self.frameL.close()
-        self.frame2.close()
-        self.frame3.close()
+        self.frameC.close()
+        self.frameS.close()
         self.frameR.show()
     def __startServer(self, client):
         stdin, stdout, stderr = client.exec_command('systemctl start minecraft')
@@ -177,10 +177,10 @@ class Window(QMainWindow):
             self.frameL.hide()
             self.frameR.show()
     def connect(self, host, user, pas): # Pack to config window
-        title = QLabel(self.frame2)
+        title = QLabel(self.frameC)
         tPng = QPixmap("./graphics/ManageCraft.png"); tPng = tPng.scaled(450, 150, Qt.KeepAspectRatio); title.setPixmap(tPng);
         self._createToolBar()
-        self.frame2.show()
+        self.frameC.show()
         self.frameR.hide()
         '''client = paramiko.SSHClient()
         client.set_missing_host_key_policy(paramiko.AutoAddPolicy())

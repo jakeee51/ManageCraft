@@ -141,7 +141,7 @@
      <bool>false</bool>
     </property>
     <property name="styleSheet">
-     <string notr="true">border-image: url(:/Buttons/RemoteButton.png);</string>
+     <string notr="true">border-image: url(:/Buttons/RemoteBtn.png);</string>
     </property>
     <property name="text">
      <string/>
@@ -163,7 +163,7 @@
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">border-image: url(:/Buttons/ConnectButton.png);</string>
+     <string notr="true">border-image: url(:/Buttons/ConnectBtn.png);</string>
     </property>
     <property name="text">
      <string/>
@@ -220,7 +220,7 @@
      </property>
      <property name="styleSheet">
       <string notr="true">
-border-image: url(:/Buttons/LocalButton.png);</string>
+border-image: url(:/Buttons/LocalBtn.png);</string>
      </property>
      <property name="text">
       <string/>
