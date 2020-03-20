@@ -60,10 +60,9 @@ background-repeat: no-repeat;")
         self.frameC = QFrame(self.centralWidget()); self.frameC.hide(); self.frameC.setFixedSize(1024, 540)
         self.frameS = QFrame(self.centralWidget()); self.frameS.hide(); self.frameS.setFixedSize(1024, 540)
         self._createFirstScreen()
-        self.mainMenu = True; self.tools = None
+        self.mainMenu = True; self.tools = None; self.status = None
 
         self.client = None
-
 
     def __returnTo(self, frame, prev):
         prev.hide()
@@ -90,9 +89,9 @@ background-repeat: no-repeat;")
         self.tools.addAction("CONFIGURATION", self.close)
         self.tools.addAction("STATUS", self.close)
     def _createStatusBar(self):
-        status = QStatusBar()
-        status.showMessage("Server Status: Online / Offline")
-        self.setStatusBar(status)
+        self.status = QStatusBar(); self.status.addPermanentWidget(QLabel("Server Status: Online / Offline"))
+        self.status.showMessage("Welcome to ManageCraft!")
+        self.setStatusBar(self.status)
     def btnPressToggle(self, b, png):
         Png = QIcon(f"./graphics/{png}"); b.setIcon(Png)
         b.setIconSize(QSize(200, 40))
