@@ -5,7 +5,7 @@ Author: David J. Morfe,
         & Ali E. Khan
 Application Name: ManageCraft
 Functionality Purpose: A Minecraft Server Manager Application
-Version: 0.0.4
+Version: 0.0.5
 '''
 #3/20/20
 
@@ -24,7 +24,7 @@ for line in stdout:
 
 client.close()'''
 
-#Find ez way to import .ui->.py into Frame/Widget/Layout
+#Get server directory path for remote
 
 import paramiko
 import re, os, sys
@@ -35,6 +35,7 @@ from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QGridLayout, QFormLayout
 from PyQt5.QtGui import QIcon, QPixmap, QFont
 from PyQt5.QtCore import Qt, QSize
 from functools import partial
+from FrameTest import UI
 
 class Window(QMainWindow):
     '''This class instantiates the main gui window'''
@@ -59,11 +60,12 @@ background-repeat: no-repeat;")
         self.pas.setEchoMode(QLineEdit.Password)
         self.host.setFixedSize(250, 50); self.path.setFixedSize(350, 35)
         self.user.setFixedSize(250, 50); self.pas.setFixedSize(250, 50)
-        
+
         self.frameR = QFrame(self.centralWidget()); self.frameR.setFixedSize(1024, 540)
         self.frameL = QFrame(self.centralWidget()); self.frameL.hide(); self.frameL.setFixedSize(1024, 540)
         self.frameC = QFrame(self.centralWidget()); self.frameC.hide(); self.frameC.setFixedSize(1024, 540)
         self.frameS = QFrame(self.centralWidget()); self.frameS.hide(); self.frameS.setFixedSize(1024, 540)
+        ui = UI(); ui.setupUi(self.frameC)
         self._createFirstScreen()
         self.mainMenu = True; self.tools = None; self.status = None
 
@@ -98,12 +100,10 @@ background-repeat: no-repeat;")
         self.tools.addAction("CONFIGURATION", self.close)
         self.tools.addAction("STATUS", self.close)
     def _createStatusBar(self):
-        self.status = QStatusBar(); self.status.addPermanentWidget(QLabel("Server Status: Online / Offline"))
+        self.status = QStatusBar();
+        self.status.addPermanentWidget(QLabel("Server Status: N/A"))
         self.status.showMessage("Be sure you're under the same network as your server or connected via VPN!")
         self.setStatusBar(self.status)
-    def btnPressToggle(self, b, png):
-        Png = QIcon(f"./graphics/{png}"); b.setIcon(Png)
-        b.setIconSize(QSize(200, 40))
 
     def _createSecondScreen(self):
         vLayout = QVBoxLayout(self.centralWidget()); vLayout.setAlignment(Qt.AlignTop)
@@ -192,6 +192,7 @@ background-repeat: no-repeat;")
         self.frameR.setLayout(vLayout)
         self.mainMenu = False
         self._createSecondScreen()
+
     def remote(self):
         if self.frameR.isVisible():
             pass
@@ -201,13 +202,13 @@ background-repeat: no-repeat;")
     def connect(self, host, user, pas): # Pack to config window
         #title = QLabel(self.frameC); tPng = QPixmap("./graphics/ManageCraft.png"); 
         #tPng = tPng.scaled(450, 150, Qt.KeepAspectRatio); title.setPixmap(tPng);
-        self._createToolBar()
-        self.frameC.show()
-        self.frameR.hide()
         '''client = paramiko.SSHClient()
         client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        client.connect(host, port=22, username=user, password=pas)
+        client.connect(self.host, port=22, username=self.user, password=self.pas)
         self.client = client'''
+        self._createToolBar()
+        self.frameR.hide()
+        self.frameC.show()
     def local(self):
         if self.frameL.isVisible():
             pass
@@ -217,7 +218,13 @@ background-repeat: no-repeat;")
     def browse(self): # Pack to browse window
         getPath = QFileDialog().getExistingDirectory()
         self.path.setText(getPath)
-        pass
+        if self.path.text() != '':
+            self._createToolBar()
+            self.frameL.hide()
+            self.frameC.show()
+    def btnPressToggle(self, b, png):
+        Png = QIcon(f"./graphics/{png}"); b.setIcon(Png)
+        b.setIconSize(QSize(200, 40))
 
 if __name__ == "__main__":
     app = QApplication([])

@@ -1,42 +1,139 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>ManageCraft</class>
- <widget class="QMainWindow" name="ManageCraft">
+ <class>FrameC</class>
+ <widget class="QWidget" name="FrameC">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>458</width>
-    <height>327</height>
+    <width>640</width>
+    <height>480</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>ManageCraft</string>
+   <string>Form</string>
   </property>
-  <widget class="QWidget" name="centralwidget"/>
-  <widget class="QMenuBar" name="menubar">
+  <widget class="QWidget" name="w1" native="true">
    <property name="geometry">
     <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>458</width>
-     <height>21</height>
+     <x>9</x>
+     <y>9</y>
+     <width>308</width>
+     <height>462</height>
     </rect>
    </property>
-  </widget>
-  <widget class="QStatusBar" name="statusbar"/>
-  <widget class="QToolBar" name="toolBar">
-   <property name="windowTitle">
-    <string>toolBar</string>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(170, 170, 127);</string>
    </property>
-   <attribute name="toolBarArea">
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
+   <widget class="QWidget" name="formLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>19</x>
+      <y>19</y>
+      <width>271</width>
+      <height>421</height>
+     </rect>
+    </property>
+    <layout class="QFormLayout" name="form">
+     <property name="labelAlignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="formAlignment">
+      <set>Qt::AlignHCenter|Qt::AlignTop</set>
+     </property>
+     <item row="0" column="0">
+      <widget class="QLabel" name="abcLabel">
+       <property name="text">
+        <string>abc</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QSpinBox" name="abcSpinBox"/>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="defLabel">
+       <property name="text">
+        <string>def</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="defLineEdit"/>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="ghiLabel">
+       <property name="text">
+        <string>ghi</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QComboBox" name="ghiComboBox"/>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="jklLabel">
+       <property name="text">
+        <string>jkl</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QCheckBox" name="jklCheckBox"/>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="mnoLabel">
+       <property name="text">
+        <string>mno</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0">
+      <widget class="QDial" name="mnoDial"/>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QWidget" name="w2" native="true">
+   <property name="geometry">
+    <rect>
+     <x>323</x>
+     <y>9</y>
+     <width>308</width>
+     <height>462</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(0, 170, 127);</string>
+   </property>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>291</width>
+      <height>441</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>VIEW MODS DIRECTORY HERE</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources/>
  <connections/>
+ <slots>
+  <signal>signaljh()</signal>
+ </slots>
 </ui>
