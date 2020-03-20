@@ -5,9 +5,9 @@ Author: David J. Morfe,
         & Ali E. Khan
 Application Name: ManageCraft
 Functionality Purpose: A Minecraft Server Manager Application
-Version: 0.0.3
+Version: 0.0.4
 '''
-#3/19/20
+#3/20/20
 
 '''
 import sys, os, re, time, paramiko
@@ -24,15 +24,15 @@ for line in stdout:
 
 client.close()'''
 
-#Local Main Menu Button & self.file input via dialog file explorer
+#Find ez way to import .ui->.py into Frame/Widget/Layout
 
 import paramiko
 import re, os, sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QFrame, QDialog
-from PyQt5.QtWidgets import QStatusBar, QToolBar, QButtonGroup
+from PyQt5.QtWidgets import QStatusBar, QToolBar, QButtonGroup, QFileDialog
 from PyQt5.QtWidgets import QLabel, QPushButton, QRadioButton, QLineEdit
 from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QGridLayout, QFormLayout
-from PyQt5.QtGui import QIcon, QPixmap
+from PyQt5.QtGui import QIcon, QPixmap, QFont
 from PyQt5.QtCore import Qt, QSize
 from functools import partial
 
@@ -42,7 +42,7 @@ class Window(QMainWindow):
         super().__init__(parent)
         self.setWindowTitle("ManagerCraft")
         self.setCentralWidget(QWidget())
-        self.frame = QFrame(self.centralWidget()); self.frame.setFixedSize(1030, 540)
+        self.frame = QFrame(self.centralWidget()); self.frame.setFixedSize(1024, 500)
         self.frame.setStyleSheet("border-image: url(./graphics/WindowFrame.png);\
 background-repeat: no-repeat;")
         self.setGeometry(100, 100, 1024, 540)
@@ -50,10 +50,15 @@ background-repeat: no-repeat;")
         self._createMenu()
         self._createStatusBar()
 
+        font = QFont("Minecrafter", 22)
+
         self.host = QLineEdit(); self.path = QLineEdit()
         self.user = QLineEdit(); self.pas = QLineEdit()
+        self.host.setFont(font); #self.path.setFont(font)
+        self.user.setFont(font); self.pas.setFont(font)
         self.pas.setEchoMode(QLineEdit.Password)
-        self.host.setFixedSize(250, 20); self.user.setFixedSize(250, 20); self.pas.setFixedSize(250, 20)
+        self.host.setFixedSize(250, 50); self.path.setFixedSize(350, 35)
+        self.user.setFixedSize(250, 50); self.pas.setFixedSize(250, 50)
         
         self.frameR = QFrame(self.centralWidget()); self.frameR.setFixedSize(1024, 540)
         self.frameL = QFrame(self.centralWidget()); self.frameL.hide(); self.frameL.setFixedSize(1024, 540)
@@ -94,7 +99,7 @@ background-repeat: no-repeat;")
         self.tools.addAction("STATUS", self.close)
     def _createStatusBar(self):
         self.status = QStatusBar(); self.status.addPermanentWidget(QLabel("Server Status: Online / Offline"))
-        self.status.showMessage("Welcome to ManageCraft!")
+        self.status.showMessage("Be sure you're under the same network as your server or connected via VPN!")
         self.setStatusBar(self.status)
     def btnPressToggle(self, b, png):
         Png = QIcon(f"./graphics/{png}"); b.setIcon(Png)
@@ -102,6 +107,7 @@ background-repeat: no-repeat;")
 
     def _createSecondScreen(self):
         vLayout = QVBoxLayout(self.centralWidget()); vLayout.setAlignment(Qt.AlignTop)
+        vLayout.addWidget(QLabel())
         hLayout = QHBoxLayout(self.centralWidget()); hLayout.setSpacing(0)
         hLayout.setAlignment(Qt.AlignHCenter)
         formLayout = QFormLayout(self.centralWidget()); formLayout.setFormAlignment(Qt.AlignHCenter)
@@ -112,22 +118,27 @@ background-repeat: no-repeat;")
         tPng = QPixmap("./graphics/ManageCraft.png"); title.setPixmap(tPng)
         btn1 = QPushButton(); btn1.setFixedSize(130, 40)
         btn1.setCheckable(True); btn1.setChecked(False)
-        rcPng = QIcon("./graphics/RemoteBtn.png"); btn1.setIcon(rcPng)
-        btn1.setIconSize(QSize(170, 40))
+        rcPng = QIcon("./graphics/RemoteBtn.png")
+        btn1.setIcon(rcPng); btn1.setIconSize(QSize(170, 40))
         btn2 = QPushButton(); btn2.setFixedSize(130, 40);
         btn2.setCheckable(True); btn2.setChecked(True)
-        lcPng = QIcon("./graphics/LocalBtnChecked.png"); btn2.setIcon(lcPng)
-        btn2.setIconSize(QSize(170, 40))
-        btn3 = QPushButton("BROWSE!"); btn3.setFixedSize(200, 50)
+        lcPng = QIcon("./graphics/LocalBtnChecked.png")
+        btn2.setIcon(lcPng); btn2.setIconSize(QSize(170, 40))
+        btn3 = QPushButton(); btn3.setFixedSize(130, 40)
+        bPng = QIcon("./graphics/BrowseBtn.png")
+        btn3.setIcon(bPng); btn3.setIconSize(QSize(200, 40))
         btn1.toggled.connect(self.remote); btnGroup.addButton(btn1)
         btn2.toggled.connect(self.local); btnGroup.addButton(btn2)
         btn3.clicked.connect(self.browse)
         btn1.pressed.connect(partial(self.btnPressToggle, btn1, "RemoteBtnChecked.png"))
         btn1.released.connect(partial(self.btnPressToggle, btn1, "RemoteBtn.png"))
+        btn3.pressed.connect(partial(self.btnPressToggle, btn3, "BrowseBtnChecked.png"))
+        btn3.released.connect(partial(self.btnPressToggle, btn3, "BrowseBtn.png"))
 
         vLayout.addWidget(title, alignment=Qt.AlignCenter)
         hLayout.addWidget(btn1, alignment=Qt.AlignHCenter); hLayout.addWidget(btn2, alignment=Qt.AlignHCenter)
         vLayout.addLayout(hLayout)
+        vLayout.addWidget(self.path, alignment=Qt.AlignHCenter)
         vLayout.addWidget(btn3, alignment=Qt.AlignCenter)
 
         self.frameL.setLayout(vLayout)
@@ -135,6 +146,7 @@ background-repeat: no-repeat;")
         self.frameL.hide()
     def _createFirstScreen(self):
         vLayout = QVBoxLayout(self.centralWidget()); vLayout.setAlignment(Qt.AlignTop)
+        vLayout.addWidget(QLabel())
         hLayout = QHBoxLayout(self.centralWidget()); hLayout.setSpacing(0)
         hLayout.setAlignment(Qt.AlignHCenter)
         formLayout = QFormLayout(self.centralWidget()); formLayout.setFormAlignment(Qt.AlignHCenter)
@@ -164,9 +176,13 @@ background-repeat: no-repeat;")
         btn3.pressed.connect(partial(self.btnPressToggle, btn3, "ConnectBtnChecked.png"))
         btn3.released.connect(partial(self.btnPressToggle, btn3, "ConnectBtn.png"))
 
-        formLayout.addRow("Host:", self.host)
-        formLayout.addRow("Username:", self.user)
-        formLayout.addRow("Password:", self.pas)
+        host = QLabel(); hPng = QPixmap("./graphics/Host.png"); host.setPixmap(hPng)
+        user = QLabel(); uPng = QPixmap("./graphics/Username.png"); user.setPixmap(uPng)
+        pas = QLabel(); pPng = QPixmap("./graphics/Password.png"); pas.setPixmap(pPng)
+
+        formLayout.addRow(host, self.host)
+        formLayout.addRow(user, self.user)
+        formLayout.addRow(pas, self.pas)
         vLayout.addWidget(title, alignment=Qt.AlignCenter)
         hLayout.addWidget(btn1, alignment=Qt.AlignHCenter); hLayout.addWidget(btn2, alignment=Qt.AlignHCenter)
         vLayout.addLayout(hLayout)
@@ -199,6 +215,8 @@ background-repeat: no-repeat;")
             self.frameR.hide()
             self.frameL.show()
     def browse(self): # Pack to browse window
+        getPath = QFileDialog().getExistingDirectory()
+        self.path.setText(getPath)
         pass
 
 if __name__ == "__main__":
