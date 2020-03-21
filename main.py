@@ -9,22 +9,23 @@ Version: 0.0.5
 '''
 #3/20/20
 
-'''
-import sys, os, re, time, paramiko
+
+'''import sys, os, re, time, paramiko
 
 client = paramiko.SSHClient()
 client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 client.connect('192.168.10.204', username='jake', password='mantabayray51')
 
-stdin, stdout, stderr = client.exec_command('cd /home/jake')
-stdin, stdout, stderr = client.exec_command('./test.sh')
+stdin, stdout, stderr = client.exec_command('pwd')
 
 for line in stdout:
-    print(line.strip('\n'))
+    print(line.strip('\n'))'''
 
-client.close()'''
+client.close()
 
 #Get server directory path for remote
+  #Send commands to server for each file path changed
+  #Get pwd, and ls -d */ and the next layer of folders for each when prompted to
 
 import paramiko
 import re, os, sys
@@ -43,9 +44,9 @@ class Window(QMainWindow):
         super().__init__(parent)
         self.setWindowTitle("ManagerCraft")
         self.setCentralWidget(QWidget())
-        self.frame = QFrame(self.centralWidget()); self.frame.setFixedSize(1024, 500)
-        self.frame.setStyleSheet("border-image: url(./graphics/WindowFrame.png);\
-background-repeat: no-repeat;")
+        self.styleFrame = QFrame(self.centralWidget()); self.styleFrame.setFixedSize(1024, 500)
+        self.styleFrame.setStyleSheet("border-image: url(./graphics/WindowFrame.png);\
+background-image: url(./graphics/Frame_R.png); background-repeat: no-repeat;")
         self.setGeometry(100, 100, 1024, 540)
         self.setFixedSize(1024, 540)
         self._createMenu()
@@ -65,7 +66,7 @@ background-repeat: no-repeat;")
         self.frameL = QFrame(self.centralWidget()); self.frameL.hide(); self.frameL.setFixedSize(1024, 540)
         self.frameC = QFrame(self.centralWidget()); self.frameC.hide(); self.frameC.setFixedSize(1024, 540)
         self.frameS = QFrame(self.centralWidget()); self.frameS.hide(); self.frameS.setFixedSize(1024, 540)
-        ui = UI(); ui.setupUi(self.frameC)
+        self.ui = UI(); self.ui.setupUi(self.frameC)
         self._createFirstScreen()
         self.mainMenu = True; self.tools = None; self.status = None
 
@@ -197,22 +198,28 @@ background-repeat: no-repeat;")
         if self.frameR.isVisible():
             pass
         else:
+            self.styleFrame.setStyleSheet("border-image: url(./graphics/WindowFrame.png);\
+background-image: url(./graphics/Frame_R.png); background-repeat: no-repeat;")
             self.frameL.hide()
             self.frameR.show()
     def connect(self, host, user, pas): # Pack to config window
-        #title = QLabel(self.frameC); tPng = QPixmap("./graphics/ManageCraft.png"); 
-        #tPng = tPng.scaled(450, 150, Qt.KeepAspectRatio); title.setPixmap(tPng);
-        '''client = paramiko.SSHClient()
-        client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        client.connect(self.host, port=22, username=self.user, password=self.pas)
-        self.client = client'''
+##        title = QLabel(self.frameC); tPng = QPixmap("./graphics/ManageCraft.png"); 
+##        tPng = tPng.scaled(450, 150, Qt.KeepAspectRatio); title.setPixmap(tPng);
+##        client = paramiko.SSHClient()
+##        client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+##        client.connect(self.host, port=22, username=self.user, password=self.pas)
+##        self.client = client
+        #Run BLBrowser here, don't proceed unless path given
         self._createToolBar()
         self.frameR.hide()
+        self.ui.label.setText("Changed!")
         self.frameC.show()
     def local(self):
         if self.frameL.isVisible():
             pass
         else:
+            self.styleFrame.setStyleSheet("border-image: url(./graphics/WindowFrame.png);\
+background-image: url(./graphics/Frame_L.png); background-repeat: no-repeat;")
             self.frameR.hide()
             self.frameL.show()
     def browse(self): # Pack to browse window
