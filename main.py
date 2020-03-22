@@ -7,7 +7,7 @@ Application Name: ManageCraft
 Functionality Purpose: A Minecraft Server Manager Application
 Version: 0.0.5
 '''
-#3/20/20
+#3/22/20
 
 
 '''import sys, os, re, time, paramiko
@@ -25,7 +25,10 @@ client.close()'''
 
 #Get server directory path for remote
   #Send commands to server for each file path changed
-  #Get pwd, and ls -d */ and the next layer of folders for each when prompted to
+  #Get pwd, and ls -d */ and check if there is at least 1
+  #folder within a folder in view
+#Change Window Title to current server directory path
+#Account for server shutdown mid-use
 
 import paramiko
 import re, os, sys
