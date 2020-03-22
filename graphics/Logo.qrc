@@ -5,6 +5,10 @@
     <file>ManageCraft.png</file>
   </qresource>
   <qresource prefix="Buttons">
+    <file>ConfigBtn.png</file>
+    <file>TBBtn.png</file>
+    <file>F2TB.png</file>
+    <file>MCButtonUnchecked.png</file>
     <file>Username.png</file>
     <file>Password.png</file>
     <file>Host.png</file>
