@@ -19,9 +19,9 @@ client.connect('192.168.10.204', username='jake', password='mantabayray51')
 stdin, stdout, stderr = client.exec_command('pwd')
 
 for line in stdout:
-    print(line.strip('\n'))'''
+    print(line.strip('\n'))
 
-client.close()
+client.close()'''
 
 #Get server directory path for remote
   #Send commands to server for each file path changed
