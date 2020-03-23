@@ -11,7 +11,10 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Open</string>
+  </property>
+  <property name="sizeGripEnabled">
+   <bool>false</bool>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -21,39 +24,9 @@
      </property>
      <column>
       <property name="text">
-       <string>folder1</string>
+       <string>Name</string>
       </property>
      </column>
-     <item>
-      <property name="text">
-       <string>folder</string>
-      </property>
-      <item>
-       <property name="text">
-        <string>Subfolder</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>New Item</string>
-       </property>
-      </item>
-     </item>
-     <item>
-      <property name="text">
-       <string>folder</string>
-      </property>
-      <item>
-       <property name="text">
-        <string>Folder</string>
-       </property>
-      </item>
-     </item>
-     <item>
-      <property name="text">
-       <string>folder</string>
-      </property>
-     </item>
     </widget>
    </item>
    <item>
@@ -80,9 +53,7 @@
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="Logo.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>btnBox</sender>
