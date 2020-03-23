@@ -5,9 +5,9 @@ Author: David J. Morfe,
         & Ali E. Khan
 Application Name: ManageCraft
 Functionality Purpose: A Minecraft Server Manager Application
-Version: 0.0.5
+Version: 0.0.6
 '''
-#3/22/20
+#3/23/20
 
 
 '''import sys, os, re, time, paramiko
@@ -36,6 +36,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QFrame, QDialog
 from PyQt5.QtWidgets import QStatusBar, QToolBar, QButtonGroup, QFileDialog
 from PyQt5.QtWidgets import QLabel, QPushButton, QRadioButton, QLineEdit
 from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QGridLayout, QFormLayout
+from PyQt5.QtWidgets import QTreeWidget, QDialog, QTreeWidgetItem
 from PyQt5.QtGui import QIcon, QPixmap, QFont
 from PyQt5.QtCore import Qt, QSize
 from functools import partial
@@ -79,7 +80,10 @@ background-image: url(./graphics/Frame_R.png); background-repeat: no-repeat;")
         prev.hide()
         frame.show()
     def __DC(self):
-        #self.client.close()
+        try:
+            self.client.close()
+        except AttributeError:
+            pass
         self.removeToolBar(self.tools)
         self.frameL.close()
         self.frameC.close()
@@ -133,7 +137,7 @@ background-image: url(./graphics/Frame_R.png); background-repeat: no-repeat;")
         btn3.setIcon(bPng); btn3.setIconSize(QSize(200, 40))
         btn1.toggled.connect(self.remote); btnGroup.addButton(btn1)
         btn2.toggled.connect(self.local); btnGroup.addButton(btn2)
-        btn3.clicked.connect(self.browse)
+        btn3.clicked.connect(self.browseL)
         btn1.pressed.connect(partial(self.btnPressToggle, btn1, "RemoteBtnChecked.png"))
         btn1.released.connect(partial(self.btnPressToggle, btn1, "RemoteBtn.png"))
         btn3.pressed.connect(partial(self.btnPressToggle, btn3, "BrowseBtnChecked.png"))
@@ -172,9 +176,7 @@ background-image: url(./graphics/Frame_R.png); background-repeat: no-repeat;")
         btn3.setIconSize(QSize(200, 40))
         btn1.toggled.connect(self.remote); btnGroup.addButton(btn1)
         btn2.toggled.connect(self.local); btnGroup.addButton(btn2)
-        btn3.clicked.connect(partial(self.connect,
-                                     self.host,
-                                     self.user, self.pas))
+        btn3.clicked.connect(partial(self.browseR))
         btn2.pressed.connect(partial(self.btnPressToggle, btn2, "LocalBtnChecked.png"))
         btn2.released.connect(partial(self.btnPressToggle, btn2, "LocalBtn.png"))
         btn3.pressed.connect(partial(self.btnPressToggle, btn3, "ConnectBtnChecked.png"))
@@ -205,14 +207,13 @@ background-image: url(./graphics/Frame_R.png); background-repeat: no-repeat;")
 background-image: url(./graphics/Frame_R.png); background-repeat: no-repeat;")
             self.frameL.hide()
             self.frameR.show()
-    def connect(self, host, user, pas): # Pack to config window
+    def connect(self, host, path, user, pas): # Pack to config window
 ##        title = QLabel(self.frameC); tPng = QPixmap("./graphics/ManageCraft.png"); 
 ##        tPng = tPng.scaled(450, 150, Qt.KeepAspectRatio); title.setPixmap(tPng);
 ##        client = paramiko.SSHClient()
 ##        client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 ##        client.connect(self.host, port=22, username=self.user, password=self.pas)
 ##        self.client = client
-        #Run BLBrowser here, don't proceed unless path given
         self._createToolBar()
         self.frameR.hide()
         self.ui.label.setText("Changed!")
@@ -225,13 +226,20 @@ background-image: url(./graphics/Frame_R.png); background-repeat: no-repeat;")
 background-image: url(./graphics/Frame_L.png); background-repeat: no-repeat;")
             self.frameR.hide()
             self.frameL.show()
-    def browse(self): # Pack to browse window
+    def browseL(self):
         getPath = QFileDialog().getExistingDirectory()
         self.path.setText(getPath)
         if self.path.text() != '':
+            self.setWindowTitle(f"{self.path.text()} - ManageCraft")
             self._createToolBar()
             self.frameL.hide()
             self.frameC.show()
+    def browseR(self):
+        tree = QDialog(self.centralWidget())
+        #Run BLBrowser here, don't proceed unless path given
+        if self.path != '':
+            self.setWindowTitle(f"{self.path.text()} - ManageCraft")
+            self.connect(self.host.text(), self.path.text(), self.user.text(), self.pas.text())
     def btnPressToggle(self, b, png):
         Png = QIcon(f"./graphics/{png}"); b.setIcon(Png)
         b.setIconSize(QSize(200, 40))
