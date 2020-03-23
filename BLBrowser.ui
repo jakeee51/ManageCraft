@@ -11,7 +11,10 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Open</string>
+  </property>
+  <property name="sizeGripEnabled">
+   <bool>false</bool>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -21,37 +24,47 @@
      </property>
      <column>
       <property name="text">
-       <string>folder1</string>
+       <string>Name</string>
       </property>
      </column>
      <item>
       <property name="text">
-       <string>folder</string>
+       <string>users</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>home</string>
       </property>
       <item>
        <property name="text">
-        <string>Subfolder</string>
+        <string>jake</string>
        </property>
+       <item>
+        <property name="text">
+         <string>MCServers</string>
+        </property>
+        <item>
+         <property name="text">
+          <string>JMServer</string>
+         </property>
+        </item>
+       </item>
       </item>
       <item>
        <property name="text">
-        <string>New Item</string>
+        <string>david</string>
        </property>
       </item>
      </item>
      <item>
       <property name="text">
-       <string>folder</string>
+       <string>etc</string>
       </property>
-      <item>
-       <property name="text">
-        <string>Folder</string>
-       </property>
-      </item>
      </item>
      <item>
       <property name="text">
-       <string>folder</string>
+       <string>bin</string>
       </property>
      </item>
     </widget>
