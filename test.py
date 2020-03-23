@@ -31,7 +31,7 @@ gui = QDialog()
 gui.setStyleSheet("background-image: url(Frame_1.png);\
                   background-repeat: no-repeat;")
 gui.setWindowTitle("ManagerCraft (Test Environment)")
-gui.setGeometry(100, 100, 1024, 540)
+gui.setGeometry(100, 100, 540, 480)
 
 '''frame = QFrame(gui)
 #frame.setAttribute(Qt.WA_DeleteOnClose)
@@ -46,18 +46,38 @@ btn.clicked.connect(partial(login, gui, frame, grab, pas))
 
 layout.addWidget(btn)
 frame.setLayout(layout)'''
-
+folderIcon = QIcon("./graphics/folder.jpeg")
 tree = QTreeWidget(gui)
-cities =  QTreeWidgetItem(tree)
-cities.setText(0, "Cities")
-osloItem =  QTreeWidgetItem(cities)
-osloItem.setText(0, "Oslo")
-osloItem.setText(1, "Yes")
-planets =  QTreeWidgetItem(tree, cities)
-planets.setText(0, "Planets")
-e = QTreeWidgetItem(tree)
-e.setText(0, "Earth")
-planets.insertChild(0, e)
+tree.setColumnCount(1)
+tree.setAlternatingRowColors(True)
+tree.setHeaderLabel("Name")
+top = ["usr", "bin", "root", "home", "etc"]
+low1 = {"home": ["jake", "david"]}
+low2 = {"jake": ["CaliBot", "MCServer", "ngrok"]}
+folders = {"top": top, "low": low1}
+def grow_tree(dct):
+    items = []
+    for i in top:
+        item = QTreeWidgetItem([i])
+        item.setIcon(0, folderIcon)
+        if i in dct["low"]:
+            childs = []
+            for child in dct["low"][i]:
+                j = QTreeWidgetItem([child])
+                j.setIcon(0, folderIcon)
+                childs.append(j)
+            item.addChildren(childs)
+        items.append(item)
+    tree.addTopLevelItems(items)
+    print(tree.findItems("home", Qt.MatchExactly, 0)[0].text(0))
+##cities =  QTreeWidgetItem(tree)
+##cities.setText(0, "Cities")
+##osloItem =  QTreeWidgetItem(cities)
+##osloItem.setText(0, "Oslo")
+##planets =  QTreeWidgetItem(tree, cities)
+##planets.setText(0, "Planets")
+
+grow_tree(folders)
 
 gui.show()
 sys.exit(app.exec())

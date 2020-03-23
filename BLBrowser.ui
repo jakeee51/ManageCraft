@@ -27,46 +27,6 @@
        <string>Name</string>
       </property>
      </column>
-     <item>
-      <property name="text">
-       <string>users</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>home</string>
-      </property>
-      <item>
-       <property name="text">
-        <string>jake</string>
-       </property>
-       <item>
-        <property name="text">
-         <string>MCServers</string>
-        </property>
-        <item>
-         <property name="text">
-          <string>JMServer</string>
-         </property>
-        </item>
-       </item>
-      </item>
-      <item>
-       <property name="text">
-        <string>david</string>
-       </property>
-      </item>
-     </item>
-     <item>
-      <property name="text">
-       <string>etc</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>bin</string>
-      </property>
-     </item>
     </widget>
    </item>
    <item>
@@ -93,9 +53,7 @@
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="Logo.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>btnBox</sender>
