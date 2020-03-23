@@ -14,7 +14,7 @@ Version: 0.0.5
 
 client = paramiko.SSHClient()
 client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-client.connect('192.168.10.204', username='jake', password='mantabayray51')
+client.connect(host, username=user, password=pas)
 
 stdin, stdout, stderr = client.exec_command('pwd')
 
