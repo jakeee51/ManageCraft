@@ -28,8 +28,6 @@ def login(main, back, t1, t2):
 app = QApplication([])
 
 gui = QDialog()
-gui.setStyleSheet("background-image: url(Frame_1.png);\
-                  background-repeat: no-repeat;")
 gui.setWindowTitle("ManagerCraft (Test Environment)")
 gui.setGeometry(100, 100, 540, 480)
 
