@@ -95,15 +95,15 @@ background-image: url(./graphics/Frame_R.png); background-repeat: no-repeat;")
         self.frameC.close()
         self.frameS.close()
         self.frameR.show()
-    def __startServer(self, client):
-        stdin, stdout, stderr = client.exec_command('systemctl start minecraft')
-        #stdin, stdout, stderr = client.exec_command('systemctl start ngrok')
-    def __stopServer(self, client):
-        stdin, stdout, stderr = client.exec_command('systemctl stop minecraft')
-        #stdin, stdout, stderr = client.exec_command('systemctl stop ngrok')
-    def __restartServer(self, client):
-        stdin, stdout, stderr = client.exec_command('systemctl restart minecraft')
-        #stdin, stdout, stderr = client.exec_command('systemctl restart ngrok')
+    def __startServer(self):
+        stdin, stdout, stderr = self.client.exec_command('systemctl start minecraft')
+        #stdin, stdout, stderr = self.client.exec_command('systemctl start ngrok')
+    def __stopServer(self):
+        stdin, stdout, stderr = self.client.exec_command('systemctl stop minecraft')
+        #stdin, stdout, stderr = self.client.exec_command('systemctl stop ngrok')
+    def __restartServer(self):
+        stdin, stdout, stderr = self.client.exec_command('systemctl restart minecraft')
+        #stdin, stdout, stderr = self.client.exec_command('systemctl restart ngrok')
     def _createMenu(self):
         self.menu = self.menuBar().addMenu("Menu")
         self.menu.addAction("Disconnect", self.__DC)
@@ -214,11 +214,6 @@ background-image: url(./graphics/Frame_R.png); background-repeat: no-repeat;")
 background-image: url(./graphics/Frame_R.png); background-repeat: no-repeat;")
             self.frameL.hide()
             self.frameR.show()
-    def connect(self, path): # Pack to config window
-        self._createToolBar()
-        self.frameR.hide()
-        self.ui.label.setText("Changed!")
-        self.frameC.show()
     def local(self):
         if self.frameL.isVisible():
             pass
@@ -227,6 +222,15 @@ background-image: url(./graphics/Frame_R.png); background-repeat: no-repeat;")
 background-image: url(./graphics/Frame_L.png); background-repeat: no-repeat;")
             self.frameR.hide()
             self.frameL.show()
+    def connect(self): # Pack to config window
+        self.path.setText(self.dui.path.text())
+        if self.path.text() != '':
+            print("not yet!")
+            self.setWindowTitle(f"{self.path.text()} - ManageCraft")
+            self._createToolBar()
+            self.frameR.hide()
+            self.frameC.show()
+        self.ui.label.setText("Changed!")
     def browseL(self):
         getPath = QFileDialog().getExistingDirectory()
         self.path.setText(getPath)
@@ -245,22 +249,14 @@ background-image: url(./graphics/Frame_L.png); background-repeat: no-repeat;")
                 client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
                 client.connect(self.host.text(), port=22, username=self.user.text(), password=self.pas.text())
                 self.client = client
-                #self.dui.btnBox.accepted.connect(partial(self.connect, self.path.text()))
+                self.dui.btnBox.accepted.connect(self.connect)
+                self.dui.btnBox.rejected.connect(lambda: self.dui.path.setText(''))
                 self.plant_tree(self.client)
                 self.dialog.show()
-                self.path.setText(self.dui.path.text())
-                if self.path.text() != '':
-                    self.setWindowTitle(f"{self.path.text()} - ManageCraft")
-                    self._createToolBar()
-                    self.frameR.hide()
-                    self.frameC.show()
                 #Don't proceed until connected
             except socket.gaierror:
                 self.err.show()
             #Don't proceed unless path given
-##            if self.path.text() != '':
-##                self.setWindowTitle(f"{self.path.text()} - ManageCraft")
-##                self.connect(self.host.text(), self.path.text(), self.user.text(), self.pas.text())
     def plant_tree(self, client):
         folderIcon = QIcon("./graphics/folder.jpeg")
         self.dui.treeW.setColumnCount(1); self.dui.treeW.setAlternatingRowColors(True)
