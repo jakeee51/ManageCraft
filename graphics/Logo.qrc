@@ -5,6 +5,13 @@
     <file>ManageCraft.png</file>
   </qresource>
   <qresource prefix="Buttons">
+    <file>Start.png</file>
+    <file>StartChecked.png</file>
+    <file>Stop.png</file>
+    <file>StopChecked.png</file>
+    <file>Restart.png</file>
+    <file>RestartChecked.png</file>
+    <file>F2Box.png</file>
     <file>ConfigBtn.png</file>
     <file>TBBtn.png</file>
     <file>F2TB.png</file>
