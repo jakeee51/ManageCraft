@@ -5,9 +5,9 @@ Author: David J. Morfe,
         & Ali E. Khan
 Application Name: ManageCraft
 Functionality Purpose: A Minecraft Server Manager Application
-Version: 0.0.6
+Version: 0.0.7
 '''
-#3/23/20
+#3/24/20
 
 
 '''import sys, os, re, time, paramiko
@@ -25,21 +25,21 @@ client.close()'''
 
 #Get server directory path for remote
   #Send commands to server for each file path changed
-  #Get pwd, and ls -d */ and check if there is at least 1
-  #folder within a folder in view
-#Change Window Title to current server directory path
+  #Get pwd, and ls -d */ and next child folders
+#Run paramiko connection test to build exception handler
 #Account for server shutdown mid-use
 
-import paramiko
+import paramiko, socket
 import re, os, sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QFrame, QDialog
 from PyQt5.QtWidgets import QStatusBar, QToolBar, QButtonGroup, QFileDialog
-from PyQt5.QtWidgets import QLabel, QPushButton, QRadioButton, QLineEdit
+from PyQt5.QtWidgets import QLabel, QPushButton, QRadioButton, QLineEdit, QDialog
 from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QGridLayout, QFormLayout
-from PyQt5.QtWidgets import QTreeWidget, QDialog, QTreeWidgetItem
+from PyQt5.QtWidgets import QTreeWidget, QTreeWidgetItem
 from PyQt5.QtGui import QIcon, QPixmap, QFont
 from PyQt5.QtCore import Qt, QSize
 from functools import partial
+from BLBrowser import UI_Dialog
 from FrameTest import UI
 
 class Window(QMainWindow):
@@ -66,10 +66,16 @@ background-image: url(./graphics/Frame_R.png); background-repeat: no-repeat;")
         self.host.setFixedSize(250, 50); self.path.setFixedSize(350, 35)
         self.user.setFixedSize(250, 50); self.pas.setFixedSize(250, 50)
 
+
+        self.dialog = QDialog(self.centralWidget(), Qt.WindowTitleHint|Qt.WindowSystemMenuHint)
+        self.dialog.setModal(True)
+        self.dui = UI_Dialog(); self.dui.setupUi(self.dialog)
         self.frameR = QFrame(self.centralWidget()); self.frameR.setFixedSize(1024, 540)
         self.frameL = QFrame(self.centralWidget()); self.frameL.hide(); self.frameL.setFixedSize(1024, 540)
         self.frameC = QFrame(self.centralWidget()); self.frameC.hide(); self.frameC.setFixedSize(1024, 540)
         self.frameS = QFrame(self.centralWidget()); self.frameS.hide(); self.frameS.setFixedSize(1024, 540)
+        self.err = QLabel("<h2><font color='red'>Error: Invalid Input! Try again!</font></h2>", parent=self.frameR)
+        self.err.hide()
         self.ui = UI(); self.ui.setupUi(self.frameC)
         self._createFirstScreen()
         self.mainMenu = True; self.tools = None; self.status = None
@@ -194,6 +200,7 @@ background-image: url(./graphics/Frame_R.png); background-repeat: no-repeat;")
         vLayout.addLayout(hLayout)
         vLayout.addLayout(formLayout)
         vLayout.addWidget(btn3, alignment=Qt.AlignCenter)
+        vLayout.addWidget(self.err, alignment=Qt.AlignHCenter)
 
         self.frameR.setLayout(vLayout)
         self.mainMenu = False
@@ -207,13 +214,7 @@ background-image: url(./graphics/Frame_R.png); background-repeat: no-repeat;")
 background-image: url(./graphics/Frame_R.png); background-repeat: no-repeat;")
             self.frameL.hide()
             self.frameR.show()
-    def connect(self, host, path, user, pas): # Pack to config window
-##        title = QLabel(self.frameC); tPng = QPixmap("./graphics/ManageCraft.png"); 
-##        tPng = tPng.scaled(450, 150, Qt.KeepAspectRatio); title.setPixmap(tPng);
-##        client = paramiko.SSHClient()
-##        client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-##        client.connect(self.host, port=22, username=self.user, password=self.pas)
-##        self.client = client
+    def connect(self, path): # Pack to config window
         self._createToolBar()
         self.frameR.hide()
         self.ui.label.setText("Changed!")
@@ -235,11 +236,37 @@ background-image: url(./graphics/Frame_L.png); background-repeat: no-repeat;")
             self.frameL.hide()
             self.frameC.show()
     def browseR(self):
-        tree = QDialog(self.centralWidget())
-        #Run BLBrowser here, don't proceed unless path given
-        if self.path != '':
-            self.setWindowTitle(f"{self.path.text()} - ManageCraft")
-            self.connect(self.host.text(), self.path.text(), self.user.text(), self.pas.text())
+        if self.host.text() == '' or self.user.text() == '' or self.pas.text() == '':
+            self.err.show()
+        else:
+            try:
+                self.err.hide()
+                client = paramiko.SSHClient()
+                client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+                client.connect(self.host.text(), port=22, username=self.user.text(), password=self.pas.text())
+                self.client = client
+                #self.dui.btnBox.accepted.connect(partial(self.connect, self.path.text()))
+                self.plant_tree(self.client)
+                self.dialog.show()
+                self.path.setText(self.dui.path.text())
+                if self.path.text() != '':
+                    self.setWindowTitle(f"{self.path.text()} - ManageCraft")
+                    self._createToolBar()
+                    self.frameR.hide()
+                    self.frameC.show()
+                #Don't proceed until connected
+            except socket.gaierror:
+                self.err.show()
+            #Don't proceed unless path given
+##            if self.path.text() != '':
+##                self.setWindowTitle(f"{self.path.text()} - ManageCraft")
+##                self.connect(self.host.text(), self.path.text(), self.user.text(), self.pas.text())
+    def plant_tree(self, client):
+        folderIcon = QIcon("./graphics/folder.jpeg")
+        self.dui.treeW.setColumnCount(1); self.dui.treeW.setAlternatingRowColors(True)
+        stdin, stdout, stderr = client.exec_command('ls -d */')
+        top = [i.strip('/\n') for i in stdout if True]
+        print(top)
     def btnPressToggle(self, b, png):
         Png = QIcon(f"./graphics/{png}"); b.setIcon(Png)
         b.setIconSize(QSize(200, 40))
