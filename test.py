@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QFrame, QDialog
 from PyQt5.QtWidgets import QStatusBar, QToolBar, QButtonGroup, QFileDialog
 from PyQt5.QtWidgets import QLabel, QPushButton, QRadioButton, QLineEdit
 from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QGridLayout, QFormLayout
-from PyQt5.QtWidgets import QTreeWidget, QDialog, QTreeWidgetItem
+from PyQt5.QtWidgets import QTreeWidget, QDialog, QTreeWidgetItem, QTreeWidgetItemIterator
 from PyQt5.QtGui import QIcon, QPixmap, QFont
 from PyQt5.QtCore import Qt, QSize
 from functools import partial
@@ -68,15 +68,46 @@ def grow_tree(dct):
             item.addChildren(childs)
         items.append(item)
     tree.addTopLevelItems(items)
-    print(tree.findItems("home", Qt.MatchExactly, 0)[0].text(0))
+    #print(tree.findItems("home", Qt.MatchExactly, 0)[0].text(0))
+
+'''a = QTreeWidgetItem(["home"])
+a.setIcon(0, folderIcon)
+b = QTreeWidgetItem(["mike"])
+b.setIcon(0, folderIcon)
+a.addChild(b)
+tree.insertTopLevelItem(0, a)
+index = tree.indexFromItem(b, 0)'''
+#print(tree.itemFromIndex(index).text(0))
 ##cities =  QTreeWidgetItem(tree)
 ##cities.setText(0, "Cities")
 ##osloItem =  QTreeWidgetItem(cities)
 ##osloItem.setText(0, "Oslo")
 ##planets =  QTreeWidgetItem(tree, cities)
 ##planets.setText(0, "Planets")
-
 grow_tree(folders)
+#flags = QTreeWidgetItemIterator.Selected
+it = QTreeWidgetItemIterator(tree, flags=QTreeWidgetItemIterator.All)
+mx = tree.topLevelItemCount(); c = 0
+tempath = []
+while it.value():
+    if mx > c:
+        item = it.value()
+        print(item.text(0))
+        tempath = [item.text(0)]
+        MX = item.childCount(); C = 0
+        nit = QTreeWidgetItemIterator(item, flags=QTreeWidgetItemIterator.All)
+        while nit.value():
+            if MX > C:
+                print("  sub: ", nit.value().text(0))
+                if nit.value().text(0) == "jake":
+                    tempath.append("jake")
+                    MX = 0; mx = 0; break
+                nit += 1; C += 1
+            else:
+                break
+        it += 1; c += 1
+    else:
+        break
 
 gui.show()
 sys.exit(app.exec())

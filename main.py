@@ -5,9 +5,9 @@ Author: David J. Morfe,
         & Ali E. Khan
 Application Name: ManageCraft
 Functionality Purpose: A Minecraft Server Manager Application
-Version: 0.0.7
+Version: Alpha 0.0.7
 '''
-#3/24/20
+#3/25/20
 
 
 '''import sys, os, re, time, paramiko
@@ -35,7 +35,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QFrame, QDialog
 from PyQt5.QtWidgets import QStatusBar, QToolBar, QButtonGroup, QFileDialog
 from PyQt5.QtWidgets import QLabel, QPushButton, QRadioButton, QLineEdit, QDialog
 from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QGridLayout, QFormLayout
-from PyQt5.QtWidgets import QTreeWidget, QTreeWidgetItem
+from PyQt5.QtWidgets import QTreeWidget, QTreeWidgetItem, QTreeWidgetItemIterator
 from PyQt5.QtGui import QIcon, QPixmap, QFont
 from PyQt5.QtCore import Qt, QSize
 from functools import partial
@@ -77,10 +77,9 @@ background-image: url(./graphics/Frame_R.png); background-repeat: no-repeat;")
         self.err = QLabel("<h2><font color='red'>Error: Invalid Input! Try again!</font></h2>", parent=self.frameR)
         self.err.hide()
         self.ui = UI(); self.ui.setupUi(self.frameC)
-        self._createFirstScreen()
-        self.mainMenu = True; self.tools = None; self.status = None
-
-        self.client = None
+        self._createFirstScreen(); self.mainMenu = True;
+        self.tools = None; self.status = None;
+        self.pwd = None; self.client = None
 
     def __returnTo(self, frame, prev):
         prev.hide()
@@ -90,6 +89,7 @@ background-image: url(./graphics/Frame_R.png); background-repeat: no-repeat;")
             self.client.close()
         except AttributeError:
             pass
+        self.setWindowTitle("ManagerCraft")
         self.removeToolBar(self.tools)
         self.frameL.close()
         self.frameC.close()
@@ -225,11 +225,12 @@ background-image: url(./graphics/Frame_L.png); background-repeat: no-repeat;")
     def connect(self): # Pack to config window
         self.path.setText(self.dui.path.text())
         if self.path.text() != '':
-            print("not yet!")
+            self.dui.path.setText('')
             self.setWindowTitle(f"{self.path.text()} - ManageCraft")
             self._createToolBar()
             self.frameR.hide()
             self.frameC.show()
+            #Get minecraft server's current status
         self.ui.label.setText("Changed!")
     def browseL(self):
         getPath = QFileDialog().getExistingDirectory()
@@ -257,12 +258,38 @@ background-image: url(./graphics/Frame_L.png); background-repeat: no-repeat;")
             except socket.gaierror:
                 self.err.show()
             #Don't proceed unless path given
+    def next_layer(self, lst): #Loops through folders and returns dict of subfolders
+        d = {}
+        for i in lst:
+            stdin, stdout, stderr = self.client.exec_command(f"cd {i} && ls -d */ && cd ..")
+            dirs = [fold.strip('/\n') for fold in stdout if True]
+            if len(dirs) > 0:
+                d[i] = dirs
+            else:
+                d[i] = 0
+        return d
     def plant_tree(self, client):
-        folderIcon = QIcon("./graphics/folder.jpeg")
         self.dui.treeW.setColumnCount(1); self.dui.treeW.setAlternatingRowColors(True)
         stdin, stdout, stderr = client.exec_command('ls -d */')
         top = [i.strip('/\n') for i in stdout if True]
-        print(top)
+        folders = self.next_layer(top)
+        stdin, stdout, stderr = client.exec_command('pwd')
+        self.pwd = [i for i in stdout if True][0]
+        self.grow_tree(folders)
+    def grow_tree(self, folders):
+        items = []; folderIcon = QIcon("./graphics/folder.jpeg")
+        for folder in folders:
+            item = QTreeWidgetItem([folder])
+            item.setIcon(0, folderIcon)
+            if folders[folder] != 0:
+                childs = []
+                for sub in folders[folder]:
+                    s = QTreeWidgetItem([sub])
+                    s.setIcon(0, folderIcon)
+                    childs.append(s)
+                item.addChildren(childs)
+            items.append(item)
+        self.dui.treeW.addTopLevelItems(items)
     def btnPressToggle(self, b, png):
         Png = QIcon(f"./graphics/{png}"); b.setIcon(Png)
         b.setIconSize(QSize(200, 40))
