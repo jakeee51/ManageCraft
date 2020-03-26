@@ -13,38 +13,6 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QLabel" name="label_3">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>70</y>
-     <width>161</width>
-     <height>441</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true"> border-image: url(:/Buttons/F2TB.png);</string>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_2">
-   <property name="geometry">
-    <rect>
-     <x>40</x>
-     <y>80</y>
-     <width>121</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">image: url(:/Buttons/TBBtn.png);</string>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-  </widget>
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
@@ -56,22 +24,6 @@
    </property>
    <property name="styleSheet">
     <string notr="true">image: url(:/Labels/ManageCraft.png);</string>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_4">
-   <property name="geometry">
-    <rect>
-     <x>40</x>
-     <y>120</y>
-     <width>121</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">image: url(:/Buttons/ConfigBtn.png);</string>
    </property>
    <property name="text">
     <string/>
@@ -103,20 +55,24 @@
     <string notr="true">border-image: url(:/Buttons/F2Box.png);</string>
    </property>
   </widget>
-  <widget class="QWidget" name="widget_3" native="true">
+  <widget class="QPushButton" name="pushButton">
    <property name="geometry">
     <rect>
-     <x>220</x>
+     <x>420</x>
      <y>40</y>
      <width>101</width>
      <height>31</height>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">border-image: url(:/Buttons/Start.png);</string>
+    <string notr="true">border-image: url(:/Buttons/RSTButtonUnchecked.png);
+</string>
+   </property>
+   <property name="text">
+    <string/>
    </property>
   </widget>
-  <widget class="QWidget" name="widget_4" native="true">
+  <widget class="QPushButton" name="pushButton_2">
    <property name="geometry">
     <rect>
      <x>320</x>
@@ -128,29 +84,32 @@
    <property name="styleSheet">
     <string notr="true">border-image: url(:/Buttons/Stop.png);</string>
    </property>
+   <property name="text">
+    <string/>
+   </property>
   </widget>
-  <widget class="QWidget" name="widget_5" native="true">
+  <widget class="QPushButton" name="pushButton_3">
    <property name="geometry">
     <rect>
-     <x>420</x>
+     <x>220</x>
      <y>40</y>
      <width>101</width>
      <height>31</height>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">border-image: url(:/Buttons/Restart.png);</string>
+    <string notr="true">border-image: url(:/Buttons/Start.png);</string>
+   </property>
+   <property name="text">
+    <string/>
    </property>
   </widget>
   <zorder>widget</zorder>
-  <zorder>label_3</zorder>
-  <zorder>label_2</zorder>
   <zorder>label</zorder>
-  <zorder>label_4</zorder>
   <zorder>widget_2</zorder>
-  <zorder>widget_3</zorder>
-  <zorder>widget_4</zorder>
-  <zorder>widget_5</zorder>
+  <zorder>pushButton</zorder>
+  <zorder>pushButton_2</zorder>
+  <zorder>pushButton_3</zorder>
  </widget>
  <resources>
   <include location="Logo.qrc"/>
