@@ -5,9 +5,9 @@ Author: David J. Morfe,
         & Ali E. Khan
 Application Name: ManageCraft
 Functionality Purpose: A Minecraft Server Manager Application
-Version: 0.0.7
+Version: Alpha 0.0.7
 '''
-#3/24/20
+#3/26/20
 
 
 '''import sys, os, re, time, paramiko
@@ -35,7 +35,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QFrame, QDialog
 from PyQt5.QtWidgets import QStatusBar, QToolBar, QButtonGroup, QFileDialog
 from PyQt5.QtWidgets import QLabel, QPushButton, QRadioButton, QLineEdit, QDialog
 from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QGridLayout, QFormLayout
-from PyQt5.QtWidgets import QTreeWidget, QTreeWidgetItem
+from PyQt5.QtWidgets import QTreeWidget, QTreeWidgetItem, QTreeWidgetItemIterator
 from PyQt5.QtGui import QIcon, QPixmap, QFont
 from PyQt5.QtCore import Qt, QSize
 from functools import partial
@@ -77,10 +77,9 @@ background-image: url(./graphics/Frame_R.png); background-repeat: no-repeat;")
         self.err = QLabel("<h2><font color='red'>Error: Invalid Input! Try again!</font></h2>", parent=self.frameR)
         self.err.hide()
         self.ui = UI(); self.ui.setupUi(self.frameC)
-        self._createFirstScreen()
-        self.mainMenu = True; self.tools = None; self.status = None
-
-        self.client = None
+        self._createFirstScreen(); self.mainMenu = True;
+        self.tools = None; self.status = None
+        self.pwd = None; self.client = None
 
     def __returnTo(self, frame, prev):
         prev.hide()
@@ -90,20 +89,21 @@ background-image: url(./graphics/Frame_R.png); background-repeat: no-repeat;")
             self.client.close()
         except AttributeError:
             pass
+        self.setWindowTitle("ManagerCraft")
         self.removeToolBar(self.tools)
         self.frameL.close()
         self.frameC.close()
         self.frameS.close()
         self.frameR.show()
-    def __startServer(self, client):
-        stdin, stdout, stderr = client.exec_command('systemctl start minecraft')
-        #stdin, stdout, stderr = client.exec_command('systemctl start ngrok')
-    def __stopServer(self, client):
-        stdin, stdout, stderr = client.exec_command('systemctl stop minecraft')
-        #stdin, stdout, stderr = client.exec_command('systemctl stop ngrok')
-    def __restartServer(self, client):
-        stdin, stdout, stderr = client.exec_command('systemctl restart minecraft')
-        #stdin, stdout, stderr = client.exec_command('systemctl restart ngrok')
+    def __startServer(self):
+        stdin, stdout, stderr = self.client.exec_command('systemctl start minecraft')
+        #stdin, stdout, stderr = self.client.exec_command('systemctl start ngrok')
+    def __stopServer(self):
+        stdin, stdout, stderr = self.client.exec_command('systemctl stop minecraft')
+        #stdin, stdout, stderr = self.client.exec_command('systemctl stop ngrok')
+    def __restartServer(self):
+        stdin, stdout, stderr = self.client.exec_command('systemctl restart minecraft')
+        #stdin, stdout, stderr = self.client.exec_command('systemctl restart ngrok')
     def _createMenu(self):
         self.menu = self.menuBar().addMenu("Menu")
         self.menu.addAction("Disconnect", self.__DC)
@@ -214,11 +214,6 @@ background-image: url(./graphics/Frame_R.png); background-repeat: no-repeat;")
 background-image: url(./graphics/Frame_R.png); background-repeat: no-repeat;")
             self.frameL.hide()
             self.frameR.show()
-    def connect(self, path): # Pack to config window
-        self._createToolBar()
-        self.frameR.hide()
-        self.ui.label.setText("Changed!")
-        self.frameC.show()
     def local(self):
         if self.frameL.isVisible():
             pass
@@ -227,6 +222,16 @@ background-image: url(./graphics/Frame_R.png); background-repeat: no-repeat;")
 background-image: url(./graphics/Frame_L.png); background-repeat: no-repeat;")
             self.frameR.hide()
             self.frameL.show()
+    def connect(self): # Pack to config window
+        self.path.setText(self.dui.path.text())
+        if self.path.text() != '':
+            self.dui.path.setText('')
+            self.setWindowTitle(f"{self.path.text()} - ManageCraft")
+            self._createToolBar()
+            self.frameR.hide()
+            self.frameC.show()
+            #Get minecraft server's current status
+        self.ui.label.setText("Changed!")
     def browseL(self):
         getPath = QFileDialog().getExistingDirectory()
         self.path.setText(getPath)
@@ -245,28 +250,89 @@ background-image: url(./graphics/Frame_L.png); background-repeat: no-repeat;")
                 client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
                 client.connect(self.host.text(), port=22, username=self.user.text(), password=self.pas.text())
                 self.client = client
-                #self.dui.btnBox.accepted.connect(partial(self.connect, self.path.text()))
+                self.dui.btnBox.accepted.connect(self.connect)
+                self.dui.btnBox.rejected.connect(lambda: self.dui.path.setText(''))
                 self.plant_tree(self.client)
                 self.dialog.show()
-                self.path.setText(self.dui.path.text())
-                if self.path.text() != '':
-                    self.setWindowTitle(f"{self.path.text()} - ManageCraft")
-                    self._createToolBar()
-                    self.frameR.hide()
-                    self.frameC.show()
                 #Don't proceed until connected
             except socket.gaierror:
                 self.err.show()
             #Don't proceed unless path given
-##            if self.path.text() != '':
-##                self.setWindowTitle(f"{self.path.text()} - ManageCraft")
-##                self.connect(self.host.text(), self.path.text(), self.user.text(), self.pas.text())
+    def next_layer(self, lst): #Loops through folders and returns dict of subfolders
+        d = {}
+        for i in lst:
+            stdin, stdout, stderr = self.client.exec_command(f"cd {i} && ls -d */ && cd ..")
+            dirs = [fold.strip('/\n') for fold in stdout if True]
+            if len(dirs) > 0:
+                d[i] = dirs
+            else:
+                d[i] = 0
+        return d
     def plant_tree(self, client):
-        folderIcon = QIcon("./graphics/folder.jpeg")
         self.dui.treeW.setColumnCount(1); self.dui.treeW.setAlternatingRowColors(True)
+        self.dui.treeW.itemExpanded.connect(partial(self.water_tree, self.dui.treeW))
+        self.dui.treeW.itemClicked.connect(partial(self.get_path, self.dui.treeW))
         stdin, stdout, stderr = client.exec_command('ls -d */')
         top = [i.strip('/\n') for i in stdout if True]
-        print(top)
+        folders = self.next_layer(top); self.cache = []
+        stdin, stdout, stderr = client.exec_command('pwd')
+        self.pwd = [i for i in stdout if True][0]
+        self.grow_tree(folders)
+    def grow_tree(self, folders):
+        items = []; folderIcon = QIcon("./graphics/folder.jpeg")
+        for folder in folders:
+            item = QTreeWidgetItem([folder])
+            item.setIcon(0, folderIcon)
+            if folders[folder] != 0:
+                childs = []
+                for sub in folders[folder]:
+                    s = QTreeWidgetItem([sub])
+                    s.setIcon(0, folderIcon)
+                    childs.append(s)
+                item.addChildren(childs)
+            items.append(item)
+        self.dui.treeW.addTopLevelItems(items)
+    def bloom_tree(self, branchItem, folders):
+        folderIcon = QIcon("./graphics/folder.jpeg")
+        it = QTreeWidgetItemIterator(branchItem, flags=QTreeWidgetItemIterator.NoChildren)
+        while it.value():
+            item = it.value()
+            for folder in folders:
+                if folder == self.get_roots(item) and folder not in self.cache:
+                    self.cache.append(folder)
+                    childs = []
+                    if folders[folder] != 0:
+                        for sub in folders[folder]:
+                            s = QTreeWidgetItem([sub])
+                            s.setIcon(0, folderIcon)
+                            childs.append(s)
+                        item.addChildren(childs)
+                else:
+                    continue
+            it += 1
+    def water_tree(self, tree):
+        it = QTreeWidgetItemIterator(tree, flags=QTreeWidgetItemIterator.HasChildren)
+        while it.value():
+            item = it.value()
+            tempath = self.get_roots(item)
+            if item.isExpanded():
+                cs = item.childCount()
+                childs = [f"{tempath}/{item.child(idx).text(0)}" for idx in range(cs) if True]
+                folders = self.next_layer(childs)
+                self.bloom_tree(item, folders)
+            it += 1
+    def get_roots(self, item): # Trace back parents of selected item
+        it = QTreeWidgetItemIterator(self.dui.treeW, flags=QTreeWidgetItemIterator.All)
+        while it.value():
+            if it.value() == item:
+                if item.parent() != None:
+                    return self.get_roots(item.parent()) + '/' + item.text(0)
+                else:
+                    return item.text(0)
+            it += 1
+    def get_path(self, tree):
+        path = self.get_roots(tree.selectedItems()[0])
+        self.dui.path.setText(self.pwd + '/' + path)
     def btnPressToggle(self, b, png):
         Png = QIcon(f"./graphics/{png}"); b.setIcon(Png)
         b.setIconSize(QSize(200, 40))
