@@ -89,6 +89,7 @@ background-image: url(./graphics/Frame_R.png); background-repeat: no-repeat;")
             self.client.close()
         except AttributeError:
             pass
+        self.close_dialog()
         self.setWindowTitle("ManagerCraft")
         self.removeToolBar(self.tools)
         self.frameL.close()
@@ -225,12 +226,19 @@ background-image: url(./graphics/Frame_L.png); background-repeat: no-repeat;")
     def connect(self): # Pack to config window
         self.path.setText(self.dui.path.text())
         if self.path.text() != '':
-            self.dui.path.setText('')
-            self.setWindowTitle(f"{self.path.text()} - ManageCraft")
-            self._createToolBar()
-            self.frameR.hide()
-            self.frameC.show()
-            #Get minecraft server's current status
+            stdin, stdout, stderr = self.client.exec_command(f"cd {self.path.text()}")
+            try:
+                err = [i for i in stderr if True][0]
+                self.err.setText("<h2><font color='red'>Error: No such file or directory!</font></h2>")
+                self.err.show()
+            except IndexError:
+                self.err.hide()
+                self.setWindowTitle(f"{self.path.text()} - ManageCraft")
+                self._createToolBar()
+                self.frameR.hide()
+                self.frameC.show()
+                #Get minecraft server's current status
+        self.close_dialog()
         self.ui.label.setText("Changed!")
     def browseL(self):
         getPath = QFileDialog().getExistingDirectory()
@@ -242,6 +250,7 @@ background-image: url(./graphics/Frame_L.png); background-repeat: no-repeat;")
             self.frameC.show()
     def browseR(self):
         if self.host.text() == '' or self.user.text() == '' or self.pas.text() == '':
+            self.err.setText("<h2><font color='red'>Error: Invalid Input! Try again!</font></h2>")
             self.err.show()
         else:
             try:
@@ -251,7 +260,7 @@ background-image: url(./graphics/Frame_L.png); background-repeat: no-repeat;")
                 client.connect(self.host.text(), port=22, username=self.user.text(), password=self.pas.text())
                 self.client = client
                 self.dui.btnBox.accepted.connect(self.connect)
-                self.dui.btnBox.rejected.connect(lambda: self.dui.path.setText(''))
+                self.dui.btnBox.rejected.connect(self.close_dialog)
                 self.plant_tree(self.client)
                 self.dialog.show()
                 #Don't proceed until connected
@@ -276,7 +285,7 @@ background-image: url(./graphics/Frame_L.png); background-repeat: no-repeat;")
         top = [i.strip('/\n') for i in stdout if True]
         folders = self.next_layer(top); self.cache = []
         stdin, stdout, stderr = client.exec_command('pwd')
-        self.pwd = [i for i in stdout if True][0]
+        self.pwd = [i for i in stdout if True][0].strip('\n')
         self.grow_tree(folders)
     def grow_tree(self, folders):
         items = []; folderIcon = QIcon("./graphics/folder.jpeg")
@@ -307,8 +316,6 @@ background-image: url(./graphics/Frame_L.png); background-repeat: no-repeat;")
                             s.setIcon(0, folderIcon)
                             childs.append(s)
                         item.addChildren(childs)
-                else:
-                    continue
             it += 1
     def water_tree(self, tree):
         it = QTreeWidgetItemIterator(tree, flags=QTreeWidgetItemIterator.HasChildren)
@@ -332,7 +339,10 @@ background-image: url(./graphics/Frame_L.png); background-repeat: no-repeat;")
             it += 1
     def get_path(self, tree):
         path = self.get_roots(tree.selectedItems()[0])
-        self.dui.path.setText(self.pwd + '/' + path)
+        self.dui.path.setText(f"{self.pwd}/{path}")
+    def close_dialog(self):
+        self.dui.path.setText('')
+        self.dui.treeW.clear()
     def btnPressToggle(self, b, png):
         Png = QIcon(f"./graphics/{png}"); b.setIcon(Png)
         b.setIconSize(QSize(200, 40))
