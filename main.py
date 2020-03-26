@@ -7,7 +7,7 @@ Application Name: ManageCraft
 Functionality Purpose: A Minecraft Server Manager Application
 Version: Alpha 0.0.7
 '''
-#3/25/20
+#3/26/20
 
 
 '''import sys, os, re, time, paramiko
@@ -78,7 +78,7 @@ background-image: url(./graphics/Frame_R.png); background-repeat: no-repeat;")
         self.err.hide()
         self.ui = UI(); self.ui.setupUi(self.frameC)
         self._createFirstScreen(); self.mainMenu = True;
-        self.tools = None; self.status = None;
+        self.tools = None; self.status = None
         self.pwd = None; self.client = None
 
     def __returnTo(self, frame, prev):
@@ -270,9 +270,11 @@ background-image: url(./graphics/Frame_L.png); background-repeat: no-repeat;")
         return d
     def plant_tree(self, client):
         self.dui.treeW.setColumnCount(1); self.dui.treeW.setAlternatingRowColors(True)
+        self.dui.treeW.itemExpanded.connect(partial(self.water_tree, self.dui.treeW))
+        self.dui.treeW.itemClicked.connect(partial(self.get_path, self.dui.treeW))
         stdin, stdout, stderr = client.exec_command('ls -d */')
         top = [i.strip('/\n') for i in stdout if True]
-        folders = self.next_layer(top)
+        folders = self.next_layer(top); self.cache = []
         stdin, stdout, stderr = client.exec_command('pwd')
         self.pwd = [i for i in stdout if True][0]
         self.grow_tree(folders)
@@ -290,6 +292,47 @@ background-image: url(./graphics/Frame_L.png); background-repeat: no-repeat;")
                 item.addChildren(childs)
             items.append(item)
         self.dui.treeW.addTopLevelItems(items)
+    def bloom_tree(self, branchItem, folders):
+        folderIcon = QIcon("./graphics/folder.jpeg")
+        it = QTreeWidgetItemIterator(branchItem, flags=QTreeWidgetItemIterator.NoChildren)
+        while it.value():
+            item = it.value()
+            for folder in folders:
+                if folder == self.get_roots(item) and folder not in self.cache:
+                    self.cache.append(folder)
+                    childs = []
+                    if folders[folder] != 0:
+                        for sub in folders[folder]:
+                            s = QTreeWidgetItem([sub])
+                            s.setIcon(0, folderIcon)
+                            childs.append(s)
+                        item.addChildren(childs)
+                else:
+                    continue
+            it += 1
+    def water_tree(self, tree):
+        it = QTreeWidgetItemIterator(tree, flags=QTreeWidgetItemIterator.HasChildren)
+        while it.value():
+            item = it.value()
+            tempath = self.get_roots(item)
+            if item.isExpanded():
+                cs = item.childCount()
+                childs = [f"{tempath}/{item.child(idx).text(0)}" for idx in range(cs) if True]
+                folders = self.next_layer(childs)
+                self.bloom_tree(item, folders)
+            it += 1
+    def get_roots(self, item): # Trace back parents of selected item
+        it = QTreeWidgetItemIterator(self.dui.treeW, flags=QTreeWidgetItemIterator.All)
+        while it.value():
+            if it.value() == item:
+                if item.parent() != None:
+                    return self.get_roots(item.parent()) + '/' + item.text(0)
+                else:
+                    return item.text(0)
+            it += 1
+    def get_path(self, tree):
+        path = self.get_roots(tree.selectedItems()[0])
+        self.dui.path.setText(self.pwd + '/' + path)
     def btnPressToggle(self, b, png):
         Png = QIcon(f"./graphics/{png}"); b.setIcon(Png)
         b.setIconSize(QSize(200, 40))

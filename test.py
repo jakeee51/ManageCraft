@@ -86,28 +86,32 @@ index = tree.indexFromItem(b, 0)'''
 ##planets.setText(0, "Planets")
 grow_tree(folders)
 #flags = QTreeWidgetItemIterator.Selected
-it = QTreeWidgetItemIterator(tree, flags=QTreeWidgetItemIterator.All)
-mx = tree.topLevelItemCount(); c = 0
-tempath = []
-while it.value():
-    if mx > c:
-        item = it.value()
-        print(item.text(0))
-        tempath = [item.text(0)]
-        MX = item.childCount(); C = 0
-        nit = QTreeWidgetItemIterator(item, flags=QTreeWidgetItemIterator.All)
-        while nit.value():
-            if MX > C:
-                print("  sub: ", nit.value().text(0))
-                if nit.value().text(0) == "jake":
-                    tempath.append("jake")
-                    MX = 0; mx = 0; break
-                nit += 1; C += 1
-            else:
-                break
-        it += 1; c += 1
-    else:
-        break
+a = 0
+def func():
+    it = QTreeWidgetItemIterator(tree, flags=QTreeWidgetItemIterator.All)
+    mx = tree.topLevelItemCount(); c = 0
+    tempath = []
+    while it.value():
+        if mx > c:
+            item = it.value()
+            if item.isExpanded():
+                tempath = [item.text(0)]
+            MX = item.childCount(); C = 0
+            nit = QTreeWidgetItemIterator(item, flags=QTreeWidgetItemIterator.All)
+            while nit.value():
+                if MX > C:
+                    global a
+                    a = nit.value().parent()
+                    if nit.value().text(0) == "jake":
+                        tempath.append("jake")
+                        MX = 0; mx = 0; break
+                    nit += 1; C += 1
+                else:
+                    break
+            it += 1; c += 1
+        else:
+            break
 
+tree.itemExpanded.connect(func)
 gui.show()
 sys.exit(app.exec())
