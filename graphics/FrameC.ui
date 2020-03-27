@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1026</width>
+    <width>924</width>
     <height>540</height>
    </rect>
   </property>
@@ -16,8 +16,8 @@
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>0</x>
-     <y>-10</y>
+     <x>10</x>
+     <y>0</y>
      <width>271</width>
      <height>71</height>
     </rect>
@@ -45,7 +45,7 @@
   <widget class="QWidget" name="widget_2" native="true">
    <property name="geometry">
     <rect>
-     <x>640</x>
+     <x>540</x>
      <y>90</y>
      <width>371</width>
      <height>441</height>
@@ -66,6 +66,7 @@
    </property>
    <property name="styleSheet">
     <string notr="true">border-image: url(:/Buttons/RSTButtonUnchecked.png);
+border-image: url(:/Buttons/Restart.png);
 </string>
    </property>
    <property name="text">
@@ -88,7 +89,7 @@
     <string/>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_3">
+  <widget class="QPushButton" name="startBtn">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -109,7 +110,7 @@
   <zorder>widget_2</zorder>
   <zorder>restartBtn</zorder>
   <zorder>stopBtn</zorder>
-  <zorder>pushButton_3</zorder>
+  <zorder>startBtn</zorder>
  </widget>
  <resources>
   <include location="Logo.qrc"/>

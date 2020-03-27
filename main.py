@@ -5,23 +5,9 @@ Author: David J. Morfe,
         & Ali E. Khan
 Application Name: ManageCraft
 Functionality Purpose: A Minecraft Server Manager Application
-Version: Alpha 0.0.7
+Version: Alpha 0.0.8
 '''
-#3/26/20
-
-
-'''import sys, os, re, time, paramiko
-
-client = paramiko.SSHClient()
-client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-client.connect(host, username=user, password=pas)
-
-stdin, stdout, stderr = client.exec_command('pwd')
-
-for line in stdout:
-    print(line.strip('\n'))
-
-client.close()'''
+#3/27/20
 
 #Get server directory path for remote
   #Send commands to server for each file path changed
@@ -40,7 +26,7 @@ from PyQt5.QtGui import QIcon, QPixmap, QFont
 from PyQt5.QtCore import Qt, QSize
 from functools import partial
 from BLBrowser import UI_Dialog
-from FrameTest import UI
+from FrameC import UI
 
 class Window(QMainWindow):
     '''This class instantiates the main gui window'''
@@ -76,10 +62,9 @@ background-image: url(./graphics/Frame_R.png); background-repeat: no-repeat;")
         self.frameS = QFrame(self.centralWidget()); self.frameS.hide(); self.frameS.setFixedSize(1024, 540)
         self.err = QLabel("<h2><font color='red'>Error: Invalid Input! Try again!</font></h2>", parent=self.frameR)
         self.err.hide()
-        self.ui = UI(); self.ui.setupUi(self.frameC)
+        self.cui = UI(); self.cui.setupUi(self.frameC)
         self._createFirstScreen(); self.mainMenu = True;
-        self.tools = None; self.status = None
-        self.pwd = None; self.client = None
+        self.tools = None; self.pwd = None; self.client = None
 
     def __returnTo(self, frame, prev):
         prev.hide()
@@ -89,6 +74,9 @@ background-image: url(./graphics/Frame_R.png); background-repeat: no-repeat;")
             self.client.close()
         except AttributeError:
             pass
+        self.styleFrame.setStyleSheet("border-image: url(./graphics/WindowFrame.png);\
+background-image: url(./graphics/Frame_R.png); background-repeat: no-repeat;")
+        self.err.hide()
         self.close_dialog()
         self.setWindowTitle("ManagerCraft")
         self.removeToolBar(self.tools)
@@ -97,14 +85,24 @@ background-image: url(./graphics/Frame_R.png); background-repeat: no-repeat;")
         self.frameS.close()
         self.frameR.show()
     def __startServer(self):
-        stdin, stdout, stderr = self.client.exec_command('systemctl start minecraft')
-        #stdin, stdout, stderr = self.client.exec_command('systemctl start ngrok')
+        stdin, stdout, stderr = self.client.exec_command('sudo systemctl start minecraft ngrok', get_pty=True)
+        stdin.write(f'{self.pas.text()}\n')
+        stdin.flush()
+        stdin, stdout, stderr = self.client.exec_command('systemctl status ngrok')
+        grabIP = [re.search(r"(?<=url=tcp://).+\d+$", i).group() for i in stdout if re.search(r"(?<=url=tcp://).+\d+$", i)][0]
+        self.status.setStyleSheet("color: green")
+        self.status.showMessage("Server is currently online!")
     def __stopServer(self):
-        stdin, stdout, stderr = self.client.exec_command('systemctl stop minecraft')
-        #stdin, stdout, stderr = self.client.exec_command('systemctl stop ngrok')
+        stdin, stdout, stderr = self.client.exec_command('sudo systemctl stop minecraft ngrok', get_pty=True)
+        stdin.write(f'{self.pas.text()}\n')
+        stdin.flush()
+        self.status.setStyleSheet("color: red")
+        self.status.showMessage("Server is currently offline!")
     def __restartServer(self):
-        stdin, stdout, stderr = self.client.exec_command('systemctl restart minecraft')
-        #stdin, stdout, stderr = self.client.exec_command('systemctl restart ngrok')
+        stdin, stdout, stderr = self.client.exec_command('sudo systemctl restart minecraft', get_pty=True)
+        stdin.write(f'{self.pas.text()}\n')
+        stdin.flush()
+        self.status.showMessage("Server is restarting", timeout=5000)
     def _createMenu(self):
         self.menu = self.menuBar().addMenu("Menu")
         self.menu.addAction("Disconnect", self.__DC)
@@ -232,14 +230,34 @@ background-image: url(./graphics/Frame_L.png); background-repeat: no-repeat;")
                 self.err.setText("<h2><font color='red'>Error: No such file or directory!</font></h2>")
                 self.err.show()
             except IndexError:
+                self.styleFrame.setStyleSheet("border-image: url(./graphics/WindowFrame.png);\
+background-image: url(./graphics/Frame_C.png); background-repeat: no-repeat;")
+                self.cui.startBtn.clicked.connect(self.__startServer)
+                self.cui.stopBtn.clicked.connect(self.__stopServer)
+                self.cui.restartBtn.clicked.connect(self.__restartServer)
+                self.cui.startBtn.pressed.connect(partial(self.btnStyleToggle, self.cui.startBtn, "StartChecked.png"))
+                self.cui.startBtn.released.connect(partial(self.btnStyleToggle, self.cui.startBtn, "Start.png"))
+                self.cui.stopBtn.pressed.connect(partial(self.btnStyleToggle, self.cui.stopBtn, "StopChecked.png"))
+                self.cui.stopBtn.released.connect(partial(self.btnStyleToggle, self.cui.stopBtn, "Stop.png"))
+                self.cui.restartBtn.pressed.connect(partial(self.btnStyleToggle, self.cui.restartBtn, "RestartChecked.png"))
+                self.cui.restartBtn.released.connect(partial(self.btnStyleToggle, self.cui.restartBtn, "Restart.png"))
                 self.err.hide()
                 self.setWindowTitle(f"{self.path.text()} - ManageCraft")
                 self._createToolBar()
                 self.frameR.hide()
                 self.frameC.show()
+                stdin, stdout, stderr = self.client.exec_command("systemctl status minecraft")
+                stat = [i for i in stdout if True][2]
+                if "Active: active" in stat:
+                    self.status.setStyleSheet("color: green")
+                    self.status.showMessage("Server is currently online!")
+                    stdin, stdout, stderr = self.client.exec_command('systemctl status ngrok')
+                    grabIP = [re.search(r"(?<=url=tcp://).+\d+$", i).group() for i in stdout if re.search(r"(?<=url=tcp://).+\d+$", i)][0]
+                else:
+                    self.status.setStyleSheet("color: red")
+                    self.status.showMessage("Server is currently offline!")
                 #Get minecraft server's current status
         self.close_dialog()
-        self.ui.label.setText("Changed!")
     def browseL(self):
         getPath = QFileDialog().getExistingDirectory()
         self.path.setText(getPath)
@@ -265,6 +283,7 @@ background-image: url(./graphics/Frame_L.png); background-repeat: no-repeat;")
                 self.dialog.show()
                 #Don't proceed until connected
             except socket.gaierror:
+                self.err.setText("<h2><font color='red'>Error: Invalid Input! Try again!</font></h2>")
                 self.err.show()
             #Don't proceed unless path given
     def next_layer(self, lst): #Loops through folders and returns dict of subfolders
@@ -343,9 +362,11 @@ background-image: url(./graphics/Frame_L.png); background-repeat: no-repeat;")
     def close_dialog(self):
         self.dui.path.setText('')
         self.dui.treeW.clear()
-    def btnPressToggle(self, b, png):
-        Png = QIcon(f"./graphics/{png}"); b.setIcon(Png)
-        b.setIconSize(QSize(200, 40))
+    def btnPressToggle(self, btn, png):
+        Png = QIcon(f"./graphics/{png}"); btn.setIcon(Png)
+        btn.setIconSize(QSize(200, 40))
+    def btnStyleToggle(self, btn, png):
+        btn.setStyleSheet(f"border-image: url(./graphics/{png})")
 
 if __name__ == "__main__":
     app = QApplication([])
