@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import QLabel, QPushButton, QRadioButton, QLineEdit
 from PyQt5.QtWidgets import QVBoxLayout, QHBoxLayout, QGridLayout, QFormLayout
 from PyQt5.QtWidgets import QTreeWidget, QDialog, QTreeWidgetItem, QTreeWidgetItemIterator
 from PyQt5.QtGui import QIcon, QPixmap, QFont
-from PyQt5.QtCore import Qt, QSize
+from PyQt5.QtCore import Qt, QSize, QTimer
 from functools import partial
 
 def backBTN(b, prev):
