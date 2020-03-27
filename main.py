@@ -9,10 +9,7 @@ Version: Alpha 0.0.8
 '''
 #3/27/20
 
-#Get server directory path for remote
-  #Send commands to server for each file path changed
-  #Get pwd, and ls -d */ and next child folders
-#Run paramiko connection test to build exception handler
+#Create list of requirments for Ali
 #Account for server shutdown mid-use
 
 import paramiko, socket
@@ -40,6 +37,8 @@ background-image: url(./graphics/Frame_R.png); background-repeat: no-repeat;")
         self.setGeometry(100, 100, 1024, 540)
         self.setFixedSize(1024, 540)
         self._createMenu()
+        self.ss = QLabel("<b>Be sure you're under the same network as your server or connected via VPN!</b>")
+        self.ss.setFixedSize(1024, 20)
         self._createStatusBar()
 
         font = QFont("Minecrafter", 22)
@@ -74,6 +73,8 @@ background-image: url(./graphics/Frame_R.png); background-repeat: no-repeat;")
             self.client.close()
         except AttributeError:
             pass
+        self.ss.setStyleSheet("background-color: white")
+        self.ss.setText("<b>Server Status:  N/A  |  Be sure you're under the same network as your server or connected via VPN!</b>")
         self.styleFrame.setStyleSheet("border-image: url(./graphics/WindowFrame.png);\
 background-image: url(./graphics/Frame_R.png); background-repeat: no-repeat;")
         self.err.hide()
@@ -90,19 +91,19 @@ background-image: url(./graphics/Frame_R.png); background-repeat: no-repeat;")
         stdin.flush()
         stdin, stdout, stderr = self.client.exec_command('systemctl status ngrok')
         grabIP = [re.search(r"(?<=url=tcp://).+\d+$", i).group() for i in stdout if re.search(r"(?<=url=tcp://).+\d+$", i)][0]
-        self.status.setStyleSheet("color: green")
-        self.status.showMessage("Server is currently online!")
+        self.ss.setStyleSheet("background-color: green")
+        self.ss.setText("<b>Server Status:  Online</b>")
     def __stopServer(self):
         stdin, stdout, stderr = self.client.exec_command('sudo systemctl stop minecraft ngrok', get_pty=True)
         stdin.write(f'{self.pas.text()}\n')
         stdin.flush()
-        self.status.setStyleSheet("color: red")
-        self.status.showMessage("Server is currently offline!")
+        self.ss.setStyleSheet("background-color: red")
+        self.ss.setText("<b><font color='white'>Server Status:  Offline</font></b>")
     def __restartServer(self):
         stdin, stdout, stderr = self.client.exec_command('sudo systemctl restart minecraft', get_pty=True)
         stdin.write(f'{self.pas.text()}\n')
         stdin.flush()
-        self.status.showMessage("Server is restarting", timeout=5000)
+        self.status.showMessage("Server Is Restarting", 5000)
     def _createMenu(self):
         self.menu = self.menuBar().addMenu("Menu")
         self.menu.addAction("Disconnect", self.__DC)
@@ -114,8 +115,7 @@ background-image: url(./graphics/Frame_R.png); background-repeat: no-repeat;")
         self.tools.addAction("STATUS", self.close)
     def _createStatusBar(self):
         self.status = QStatusBar();
-        self.status.addPermanentWidget(QLabel("Server Status: N/A"))
-        self.status.showMessage("Be sure you're under the same network as your server or connected via VPN!")
+        self.status.addWidget(self.ss)
         self.setStatusBar(self.status)
 
     def _createSecondScreen(self):
@@ -249,14 +249,13 @@ background-image: url(./graphics/Frame_C.png); background-repeat: no-repeat;")
                 stdin, stdout, stderr = self.client.exec_command("systemctl status minecraft")
                 stat = [i for i in stdout if True][2]
                 if "Active: active" in stat:
-                    self.status.setStyleSheet("color: green")
-                    self.status.showMessage("Server is currently online!")
+                    self.ss.setStyleSheet("background-color: green")
+                    self.ss.setText("<b>Server Status:  Online</b>")
                     stdin, stdout, stderr = self.client.exec_command('systemctl status ngrok')
                     grabIP = [re.search(r"(?<=url=tcp://).+\d+$", i).group() for i in stdout if re.search(r"(?<=url=tcp://).+\d+$", i)][0]
                 else:
-                    self.status.setStyleSheet("color: red")
-                    self.status.showMessage("Server is currently offline!")
-                #Get minecraft server's current status
+                    self.ss.setStyleSheet("background-color: red")
+                    self.ss.setText("<b><font color='white'>Server Status:  Offline</font></b>")
         self.close_dialog()
     def browseL(self):
         getPath = QFileDialog().getExistingDirectory()
