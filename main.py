@@ -7,7 +7,7 @@ Application Name: ManageCraft
 Functionality Purpose: A Minecraft Server Manager Application
 Version: Alpha 0.0.8
 '''
-#3/27/20
+#3/29/20
 
 #Create list of requirments for Ali
 #Handle paramiko exceptions
