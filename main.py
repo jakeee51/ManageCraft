@@ -244,7 +244,7 @@ background-image: url(./graphics/Frame_L.png); background-repeat: no-repeat;")
                 self.err.show()
             except IndexError:
                 self.styleFrame.setStyleSheet("border-image: url(./graphics/WindowFrame.png);\
-background-image: url(./graphics/Frame_C.png); background-repeat: no-repeat;")
+background-image: url(./graphics/Frame_2.png); background-repeat: no-repeat;")
                 self.cui.startBtn.clicked.connect(self.__startServer)
                 self.cui.stopBtn.clicked.connect(self.__stopServer)
                 self.cui.restartBtn.clicked.connect(self.__restartServer)
@@ -265,6 +265,8 @@ background-image: url(./graphics/Frame_C.png); background-repeat: no-repeat;")
         getPath = QFileDialog().getExistingDirectory()
         self.path.setText(getPath)
         if self.path.text() != '':
+            self.styleFrame.setStyleSheet("border-image: url(./graphics/WindowFrame.png);\
+background-image: url(./graphics/Frame_2.png); background-repeat: no-repeat;")
             self.setWindowTitle(f"{self.path.text()} - ManageCraft")
             self._createToolBar()
             self.frameL.hide()
