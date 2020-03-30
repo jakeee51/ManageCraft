@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QLabel" name="label">
+  <widget class="QLabel" name="titleLogo">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -84,8 +84,8 @@ border-image: url(:/Buttons/Restart.png);
     <rect>
      <x>30</x>
      <y>90</y>
-     <width>381</width>
-     <height>381</height>
+     <width>351</width>
+     <height>351</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -109,19 +109,144 @@ border-image: url(:/Buttons/Restart.png);
     </property>
     <item>
      <widget class="QScrollArea" name="scrollArea">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOn</enum>
+      </property>
       <property name="widgetResizable">
        <bool>true</bool>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
       </property>
       <widget class="QWidget" name="scrollAreaWidgetContents">
        <property name="geometry">
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>371</width>
-         <height>371</height>
+         <width>324</width>
+         <height>418</height>
         </rect>
        </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true"/>
+       </property>
+       <layout class="QFormLayout" name="formLayout">
+        <property name="formAlignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+        </property>
+        <item row="0" column="0">
+         <widget class="QLabel" name="aLabel">
+          <property name="text">
+           <string>a</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QLineEdit" name="aLineEdit">
+          <property name="styleSheet">
+           <string notr="true"/>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="bLabel">
+          <property name="text">
+           <string>b</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QLineEdit" name="bLineEdit"/>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="cLabel">
+          <property name="text">
+           <string>c</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QLineEdit" name="cLineEdit"/>
+        </item>
+        <item row="4" column="0">
+         <widget class="QLabel" name="aLabel_2">
+          <property name="text">
+           <string>A</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1">
+         <widget class="QDial" name="aDial"/>
+        </item>
+        <item row="5" column="0">
+         <widget class="QLabel" name="bLabel_2">
+          <property name="text">
+           <string>B</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="1">
+         <widget class="QDial" name="bDial"/>
+        </item>
+        <item row="6" column="0">
+         <widget class="QLabel" name="cLabel_2">
+          <property name="text">
+           <string>C</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="1">
+         <widget class="QDial" name="cDial"/>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="dLabel">
+          <property name="text">
+           <string>d</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QLineEdit" name="dLineEdit"/>
+        </item>
+       </layout>
       </widget>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="saveBtn">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>SAVE</string>
+      </property>
      </widget>
     </item>
    </layout>
@@ -131,8 +256,8 @@ border-image: url(:/Buttons/Restart.png);
     <rect>
      <x>530</x>
      <y>90</y>
-     <width>381</width>
-     <height>381</height>
+     <width>380</width>
+     <height>380</height>
     </rect>
    </property>
    <property name="styleSheet">
