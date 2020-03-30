@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>924</width>
-    <height>540</height>
+    <height>495</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,10 +16,10 @@
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>0</y>
+     <x>20</x>
+     <y>20</y>
      <width>271</width>
-     <height>71</height>
+     <height>51</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -29,37 +29,11 @@
     <string/>
    </property>
   </widget>
-  <widget class="QWidget" name="widget" native="true">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>90</y>
-     <width>371</width>
-     <height>441</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">border-image: url(:/Buttons/F2Box.png);</string>
-   </property>
-  </widget>
-  <widget class="QWidget" name="widget_2" native="true">
-   <property name="geometry">
-    <rect>
-     <x>540</x>
-     <y>90</y>
-     <width>371</width>
-     <height>441</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">border-image: url(:/Buttons/F2Box.png);</string>
-   </property>
-  </widget>
   <widget class="QPushButton" name="restartBtn">
    <property name="geometry">
     <rect>
-     <x>210</x>
-     <y>60</y>
+     <x>810</x>
+     <y>30</y>
      <width>101</width>
      <height>31</height>
     </rect>
@@ -76,8 +50,8 @@ border-image: url(:/Buttons/Restart.png);
   <widget class="QPushButton" name="stopBtn">
    <property name="geometry">
     <rect>
-     <x>110</x>
-     <y>60</y>
+     <x>710</x>
+     <y>30</y>
      <width>101</width>
      <height>31</height>
     </rect>
@@ -92,8 +66,8 @@ border-image: url(:/Buttons/Restart.png);
   <widget class="QPushButton" name="startBtn">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>60</y>
+     <x>610</x>
+     <y>30</y>
      <width>101</width>
      <height>31</height>
     </rect>
@@ -105,12 +79,66 @@ border-image: url(:/Buttons/Restart.png);
     <string/>
    </property>
   </widget>
-  <zorder>widget</zorder>
-  <zorder>label</zorder>
-  <zorder>widget_2</zorder>
-  <zorder>restartBtn</zorder>
-  <zorder>stopBtn</zorder>
-  <zorder>startBtn</zorder>
+  <widget class="QWidget" name="lefty" native="true">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>90</y>
+     <width>381</width>
+     <height>381</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border-image: url(:/Buttons/F2Box.png); background-repeat: no-repeat;</string>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <property name="spacing">
+     <number>10</number>
+    </property>
+    <property name="leftMargin">
+     <number>5</number>
+    </property>
+    <property name="topMargin">
+     <number>5</number>
+    </property>
+    <property name="rightMargin">
+     <number>5</number>
+    </property>
+    <property name="bottomMargin">
+     <number>5</number>
+    </property>
+    <item>
+     <widget class="QScrollArea" name="scrollArea">
+      <property name="widgetResizable">
+       <bool>true</bool>
+      </property>
+      <widget class="QWidget" name="scrollAreaWidgetContents">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>371</width>
+         <height>371</height>
+        </rect>
+       </property>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="righty" native="true">
+   <property name="geometry">
+    <rect>
+     <x>530</x>
+     <y>90</y>
+     <width>381</width>
+     <height>381</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border-image: url(:/Buttons/F2Box.png); background-repeat: no-repeat;</string>
+   </property>
+  </widget>
  </widget>
  <resources>
   <include location="Logo.qrc"/>

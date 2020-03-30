@@ -24,7 +24,7 @@ from PyQt5.QtGui import QIcon, QPixmap, QFont
 from PyQt5.QtCore import Qt, QSize, QTimer
 from functools import partial
 from BLBrowser import UI_Dialog
-from FrameC import UI
+from Frame2 import UI2
 
 class Window(QMainWindow):
     '''This class instantiates the main gui window'''
@@ -62,7 +62,7 @@ background-image: url(./graphics/Frame_R.png); background-repeat: no-repeat;")
         self.frameS = QFrame(self.centralWidget()); self.frameS.hide(); self.frameS.setFixedSize(1024, 540)
         self.err = QLabel("<h2><font color='red'>Error: Invalid Input! Try again!</font></h2>", parent=self.frameR)
         self.err.hide()
-        self.cui = UI(); self.cui.setupUi(self.frameC)
+        self.cui = UI2(); self.cui.setupUi(self.frameC)
         self._createFirstScreen(); self.mainMenu = True;
         self.tools = None; self.pwd = None; self.client = None
 
