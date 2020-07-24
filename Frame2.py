@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '.\Frame2.ui'
+# Form implementation generated from reading ui file 'Frame2.ui'
 #
 # Created by: PyQt5 UI code generator 5.13.0
 #
@@ -37,7 +37,7 @@ class UI2(object):
         self.startBtn.setText("")
         self.startBtn.setObjectName("startBtn")
         self.lefty = QtWidgets.QWidget(Form)
-        self.lefty.setGeometry(QtCore.QRect(30, 90, 351, 351))
+        self.lefty.setGeometry(QtCore.QRect(30, 90, 380, 380))
         self.lefty.setStyleSheet("border-image: url(:/Buttons/F2Box.png); background-repeat: no-repeat;")
         self.lefty.setObjectName("lefty")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.lefty)
@@ -56,7 +56,7 @@ class UI2(object):
         self.scrollArea.setAlignment(QtCore.Qt.AlignCenter)
         self.scrollArea.setObjectName("scrollArea")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 324, 418))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 353, 418))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -72,7 +72,7 @@ class UI2(object):
         self.aLabel.setObjectName("aLabel")
         self.formLayout.setWidget(0, QtWidgets.QFormLayout.LabelRole, self.aLabel)
         self.aLineEdit = QtWidgets.QLineEdit(self.scrollAreaWidgetContents)
-        self.aLineEdit.setStyleSheet("border-image: white;")
+        self.aLineEdit.setStyleSheet("")
         self.aLineEdit.setObjectName("aLineEdit")
         self.formLayout.setWidget(0, QtWidgets.QFormLayout.FieldRole, self.aLineEdit)
         self.bLabel = QtWidgets.QLabel(self.scrollAreaWidgetContents)
@@ -80,14 +80,12 @@ class UI2(object):
         self.formLayout.setWidget(1, QtWidgets.QFormLayout.LabelRole, self.bLabel)
         self.bLineEdit = QtWidgets.QLineEdit(self.scrollAreaWidgetContents)
         self.bLineEdit.setObjectName("bLineEdit")
-        self.bLineEdit.setStyleSheet("border-image: white;")
         self.formLayout.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.bLineEdit)
         self.cLabel = QtWidgets.QLabel(self.scrollAreaWidgetContents)
         self.cLabel.setObjectName("cLabel")
         self.formLayout.setWidget(2, QtWidgets.QFormLayout.LabelRole, self.cLabel)
         self.cLineEdit = QtWidgets.QLineEdit(self.scrollAreaWidgetContents)
         self.cLineEdit.setObjectName("cLineEdit")
-        self.cLineEdit.setStyleSheet("border-image: white;")
         self.formLayout.setWidget(2, QtWidgets.QFormLayout.FieldRole, self.cLineEdit)
         self.aLabel_2 = QtWidgets.QLabel(self.scrollAreaWidgetContents)
         self.aLabel_2.setObjectName("aLabel_2")
@@ -112,7 +110,6 @@ class UI2(object):
         self.formLayout.setWidget(3, QtWidgets.QFormLayout.LabelRole, self.dLabel)
         self.dLineEdit = QtWidgets.QLineEdit(self.scrollAreaWidgetContents)
         self.dLineEdit.setObjectName("dLineEdit")
-        self.dLineEdit.setStyleSheet("border-image: white;")
         self.formLayout.setWidget(3, QtWidgets.QFormLayout.FieldRole, self.dLineEdit)
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
         self.verticalLayout.addWidget(self.scrollArea)
@@ -128,6 +125,30 @@ class UI2(object):
         self.righty.setGeometry(QtCore.QRect(530, 90, 380, 380))
         self.righty.setStyleSheet("border-image: url(:/Buttons/F2Box.png); background-repeat: no-repeat;")
         self.righty.setObjectName("righty")
+        self.midy = QtWidgets.QWidget(Form)
+        self.midy.setGeometry(QtCore.QRect(420, 90, 101, 381))
+        self.midy.setStyleSheet("border-image: url(:/Buttons/F2Box.png); background-repeat: no-repeat;")
+        self.midy.setObjectName("midy")
+        self.serverLabel = QtWidgets.QLabel(self.midy)
+        self.serverLabel.setGeometry(QtCore.QRect(10, 10, 91, 21))
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.serverLabel.setFont(font)
+        self.serverLabel.setObjectName("serverLabel")
+        self.serverIP = QtWidgets.QTextEdit(self.midy)
+        self.serverIP.setGeometry(QtCore.QRect(0, 30, 101, 61))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        font.setBold(True)
+        font.setWeight(75)
+        self.serverIP.setFont(font)
+        self.serverIP.setStyleSheet("color: rgb(255, 255, 255);")
+        self.serverIP.setInputMethodHints(QtCore.Qt.ImhNone)
+        self.serverIP.setFrameShadow(QtWidgets.QFrame.Plain)
+        self.serverIP.setReadOnly(True)
+        self.serverIP.setObjectName("serverIP")
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
@@ -143,6 +164,12 @@ class UI2(object):
         self.cLabel_2.setText(_translate("Form", "C"))
         self.dLabel.setText(_translate("Form", "d"))
         self.saveBtn.setText(_translate("Form", "SAVE"))
+        self.serverLabel.setText(_translate("Form", "Server IP:"))
+        self.serverIP.setHtml(_translate("Form", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:10pt; font-weight:600; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">IP_ADDRESS_HERE</p></body></html>"))
 import Logo_rc
 
 

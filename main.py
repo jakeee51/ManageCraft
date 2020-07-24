@@ -94,7 +94,9 @@ background-image: url(./graphics/Frame_R.png); background-repeat: no-repeat;")
             self.ss.setText("<b>Server Status:  Online</b>")
             stdin, stdout, stderr = self.client.exec_command('systemctl status ngrok')
             grabIP = [re.search(r"(?<=url=tcp://).+\d+$", i).group() for i in stdout if re.search(r"(?<=url=tcp://).+\d+$", i)][0]
+            self.cui.serverIP.setText(grabIP)
         else:
+            self.cui.serverIP.setText("N/A")
             self.ss.setStyleSheet("background-color: red")
             self.ss.setText("<b><font color='white'>Server Status:  Offline</font></b>")
     def __startServer(self):
@@ -104,12 +106,14 @@ background-image: url(./graphics/Frame_R.png); background-repeat: no-repeat;")
         self.status.showMessage("Server Is Starting", 20000)
         stdin, stdout, stderr = self.client.exec_command('systemctl status ngrok')
         grabIP = [re.search(r"(?<=url=tcp://).+\d+$", i).group() for i in stdout if re.search(r"(?<=url=tcp://).+\d+$", i)][0]
+        self.cui.serverIP.setText(grabIP)
         QTimer.singleShot(20000, self.__check_status)
     def __stopServer(self):
         stdin, stdout, stderr = self.client.exec_command('sudo systemctl stop minecraft ngrok', get_pty=True)
         stdin.write(f'{self.pas.text()}\n')
         stdin.flush()
         self.status.showMessage("Server Is Stopping", 10000)
+        self.cui.serverIP.setText("N/A")
         QTimer.singleShot(10000, self.__check_status)
     def __restartServer(self):
         stdin, stdout, stderr = self.client.exec_command('sudo systemctl restart minecraft', get_pty=True)
@@ -287,7 +291,7 @@ background-image: url(./graphics/Frame_2.png); background-repeat: no-repeat;")
                 self.plant_tree(self.client)
                 self.dialog.show()
                 #Don't proceed until connected
-            except socket.gaierror:
+            except (socket.gaierror, paramiko.ssh_exception.AuthenticationException):
                 self.err.setText("<h2><font color='red'>Error: Invalid Input! Try again!</font></h2>")
                 self.err.show()
             #Don't proceed unless path given
